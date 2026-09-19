@@ -1,9 +1,31 @@
-import React from 'react'
+import React from "react";
+import logo from "@/assets/images/logo-white.png";
+import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
+import { IoIosLogIn } from "react-icons/io";
+import SearchBox from "./SearchBox";
 
 const Topbar = () => {
   return (
-    <div>Topbar</div>
-  )
-}
+    <div
+      className="flex justify-between items-center h-16 fixed w-full 
+    z-20 bg-white px-5 border-b"
+    >
+      <div>
+        <img src={logo} />
+      </div>
 
-export default Topbar
+      <div className="w-[500px]">
+        <SearchBox />
+      </div>
+      <div>
+        <Button className="rounded-full" render={<Link to="/"/>}>
+            <IoIosLogIn /> 
+            Sign In
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default Topbar;
