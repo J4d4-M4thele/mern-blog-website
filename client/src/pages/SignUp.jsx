@@ -14,9 +14,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { RouteSignIn } from "@/helpers/RouteName";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+
+    const navigate = useNavigate();
+
   const formSchema = z.object({
     username: z.string().min(3, "Username must be at least 3 characters long."),
     email: z.string().email(),
@@ -41,8 +44,20 @@ const SignUp = () => {
 
   async function onSubmit(values) {
     try {
-        const response = await fetch('');
-    }catch (error) {}
+      const response = await fetch(
+        `${getEnv("VITE_API_BASE_URL")}/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
+        if (!response.ok) {
+
+        }
+        navigate(RouteSignIn);
+    } catch (error) {}
   }
 
   return (
