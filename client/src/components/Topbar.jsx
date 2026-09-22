@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { IoIosLogIn } from "react-icons/io";
 import SearchBox from "./SearchBox";
+import { RouteSignIn } from "@/helpers/RouteName";
 
 const Topbar = () => {
   return (
@@ -19,7 +20,7 @@ const Topbar = () => {
         <SearchBox />
       </div>
       <div>
-        <Button className="rounded-full" render={<Link to="/"/>}>
+        <Button className="rounded-full" render={<Link to={RouteSignIn}/>}>
             <IoIosLogIn /> 
             Sign In
         </Button>
