@@ -20,9 +20,12 @@ const Topbar = () => {
         <SearchBox />
       </div>
       <div>
-        <Button className="rounded-full" render={<Link to={RouteSignIn}/>}>
+        <Button asChild className="rounded-full">
+            <Link to={RouteSignIn}>
             <IoIosLogIn /> 
             Sign In
+            </Link>
+            
         </Button>
       </div>
     </div>
