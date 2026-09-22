@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {RouteSignUp} from "@/helpers/RouteName";
+import { RouteSignUp } from "@/helpers/RouteName";
 import { Link } from "react-router-dom";
 
 const SignIn = () => {
@@ -53,6 +53,7 @@ const SignIn = () => {
                       <Input
                         placeholder="Enter your email address"
                         {...field}
+                        className="border-input rounded-md text-sm px-4"
                       />
                     </FormControl>
                     <FormMessage />
@@ -68,7 +69,11 @@ const SignIn = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your password" {...field} />
+                      <Input
+                        placeholder="Enter your password"
+                        {...field}
+                        className="border-input rounded-md text-sm px-4"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -82,7 +87,10 @@ const SignIn = () => {
               </Button>
               <div className="mt-5 text-sm flex justify-center items-center gap-2">
                 <p>Don&apos;t have an account?</p>
-                <Link className="text-blue-500 hover:underline" to={RouteSignUp}>
+                <Link
+                  className="text-blue-500 hover:underline"
+                  to={RouteSignUp}
+                >
                   Sign Up
                 </Link>
               </div>
