@@ -1,8 +1,8 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -11,10 +11,17 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors({
+app.use(
+  cors({
     origin: process.env.FRONTEND_URL,
-    credentials: true
-}));
+    credentials: true,
+  }),
+);
+
+mongoose
+  .connect(process.env.MONGODB_CONN, { dbName: "blog-cluster" })
+  .then(() => console.log("Database is connected successfully"))
+  .catch((err) => console.log("Database couldn't connect: ", err));
 
 app.listen(PORT, () => {
   console.log(`Server is running on Port: ${PORT}`);
