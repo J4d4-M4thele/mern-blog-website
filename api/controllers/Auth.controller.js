@@ -1,19 +1,25 @@
 import User from "../models/user.model.js";
+import { handleError } from "../helpers/handleError.js";
+import bcrypt from "bcryptjs";
 
 export const Register = async (req, res) => {
- try {
+  try {
     const { name, email, password } = req.body;
     checkUser = await User.findOne({ email });
-    if(checkUser) {
-        // user already registered
-    }else {
-        // register user
+    if (checkUser) {
+      // user already registered
+      next(handleError(409, "User already registered"));
     }
- } catch (error) {
-    res.status(500).json({ message: error.message });
- }
-}
+    // register user
+    const hashedPassword = await bcrypt.hashSync(password);
+    const user = new User({ name, email, password: hashedPassword });
+    await user.save();
+    res
+      .status(200)
+      .json({ success: true, message: "User registered successfully" });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
 
-export const Login = async (req, res) => {
-    
-}
+export const Login = async (req, res) => {};

@@ -39,8 +39,10 @@ const SignUp = () => {
     },
   });
 
-  function onSubmit(values) {
-    console.log(values);
+  async function onSubmit(values) {
+    try {
+        const response = await fetch('');
+    }catch (error) {}
   }
 
   return (
@@ -98,6 +100,7 @@ const SignUp = () => {
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
+                        type="password"
                         placeholder="Enter your password"
                         {...field}
                         className="border-input rounded-md text-sm px-4"
@@ -117,6 +120,7 @@ const SignUp = () => {
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
                       <Input
+                        type="password"
                         placeholder="Confirm your password"
                         {...field}
                         className="border-input rounded-md text-sm px-4"

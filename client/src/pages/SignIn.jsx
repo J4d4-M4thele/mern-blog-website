@@ -70,6 +70,7 @@ const SignIn = () => {
                     <FormLabel>Password</FormLabel>
                     <FormControl>
                       <Input
+                        type="password"
                         placeholder="Enter your password"
                         {...field}
                         className="border-input rounded-md text-sm px-4"
