@@ -15,10 +15,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { RouteSignIn } from "@/helpers/RouteName";
 import { Link, useNavigate } from "react-router-dom";
+import { getEnv } from "@/helpers/getEnv";
+import { showToast } from "@/helpers/showToast";
 
 const SignUp = () => {
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const formSchema = z.object({
     username: z.string().min(3, "Username must be at least 3 characters long."),
@@ -52,12 +53,17 @@ const SignUp = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(values),
-        });
-        if (!response.ok) {
-
-        }
-        navigate(RouteSignIn);
-    } catch (error) {}
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        showToast("error", data.message);
+      }
+      navigate(RouteSignIn);
+      showToast("success", data.message);
+    } catch (error) {
+      showToast("error", error.message);
+    }
   }
 
   return (

@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 export const showToast = (type, message) => {
   const config = {
     position: "top-right",
@@ -8,7 +10,7 @@ export const showToast = (type, message) => {
     draggable: true,
     progress: undefined,
     theme: "light",
-    transition: Bounce,
+    transition: "Bounce",
   };
   if (type === "success") {
     toast.success(message, config);
