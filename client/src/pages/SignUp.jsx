@@ -22,49 +22,40 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const formSchema = z.object({
-    username: z.string().min(3, "Username must be at least 3 characters long."),
-    email: z.string().email(),
-    password: z.string().min(8, "Password must be at least 8 characters long."),
-    ConfirmPassword: z
-      .string()
-      .refine(
-        (data) => data.password === data.ConfirmPassword,
-        "Passwords do not match.",
-      ),
-  });
+        name: z.string().min(3, 'Name must be at least 3 character long.'),
+        email: z.string().email(),
+        password: z.string().min(8, 'Password must be at least 8 character long'),
+        confirmPassword: z.string().refine(data => data.password === data.confirmPassword, 'Password and confirm password should be same.')
+    })
 
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-      email: "",
-      password: "",
-      ConfirmPassword: "",
-    },
-  });
-
-  async function onSubmit(values) {
-    try {
-      const response = await fetch(
-        `${getEnv("VITE_API_BASE_URL")}/auth/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
         },
-      );
-      const data = await response.json();
-      if (!response.ok) {
-        showToast("error", data.message);
-      }
-      navigate(RouteSignIn);
-      showToast("success", data.message);
-    } catch (error) {
-      showToast("error", error.message);
+    })
+
+    async function onSubmit(values) {
+        try {
+            const response = await fetch(`${getEnv('VITE_API_BASE_URL')}/auth/register`, {
+                method: 'post',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify(values)
+            })
+            const data = await response.json()
+            if (!response.ok) {
+                return showToast('error', data.message)
+            }
+
+            navigate(RouteSignIn)
+            showToast('success', data.message)
+        } catch (error) {
+            showToast('error', error.message)
+        }
     }
-  }
 
   return (
     <div className="flex justify-center items-center h-screen w-screen">
@@ -77,7 +68,7 @@ const SignUp = () => {
             <div className="mb-3">
               <FormField
                 control={form.control}
-                name="username"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Username</FormLabel>

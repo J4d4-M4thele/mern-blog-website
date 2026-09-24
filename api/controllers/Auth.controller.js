@@ -2,10 +2,10 @@ import User from "../models/user.model.js";
 import { handleError } from "../helpers/handleError.js";
 import bcrypt from "bcryptjs";
 
-export const Register = async (req, res) => {
+export const Register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-    checkUser = await User.findOne({ email });
+    const checkUser = await User.findOne({ email });
     if (checkUser) {
       // user already registered
       next(handleError(409, "User already registered"));
@@ -22,4 +22,4 @@ export const Register = async (req, res) => {
   }
 };
 
-export const Login = async (req, res) => {};
+export const Login = async (req, res, next) => {};

@@ -9,8 +9,7 @@ export const showToast = (type, message) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "light",
-    transition: "Bounce",
+    theme: "light"
   };
   if (type === "success") {
     toast.success(message, config);
