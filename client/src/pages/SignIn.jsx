@@ -20,7 +20,6 @@ import { getEnv } from "@/helpers/getEnv";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  
   const formSchema = z.object({
     email: z.string().email(),
     password: z.string().min(3, "Password is required."),

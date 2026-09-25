@@ -55,9 +55,12 @@ export const Login = async (req, res, next) => {
       path: "/",
     });
 
+    const newUser = user.toObject({getters: true});
+    delete newUser.password;
+
     res.status(200).json({
       success: true,
-      user,
+      newUser,
       message: "Logged in successfully",
     });
   } catch (error) {
