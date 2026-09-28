@@ -71,16 +71,18 @@ export const Login = async (req, res, next) => {
 export const GoogleLogin = async (req, res, next) => {
   try {
     const { name, email, avatar } = req.body;
-    let user;
-    user = await User.findOne({ email });
+    let user = await User.findOne({ email });
 
     if (!user) {
-      const password = Math.round(Math.random() * 1000000);
-      const hashedPassword = bcrypt.hashSync(password);
-      const newUser = new User({
-        name, email, password: hashedPassword, avatar
-      });
-      user = await newUser.save();
+      // Google users never type a password, so store a random hashed one
+      const randomPassword = Math.random().toString(36).slice(-10);
+      const hashedPassword = bcrypt.hashSync(randomPassword, 10);
+      user = await new User({
+        name,
+        email,
+        password: hashedPassword,
+        avatar,
+      }).save();
     }
 
     const token = jwt.sign(
@@ -100,12 +102,12 @@ export const GoogleLogin = async (req, res, next) => {
       path: "/",
     });
 
-    const newUser = user.toObject({getters: true});
-    delete newUser.password;
+    const userData = user.toObject({ getters: true });
+    delete userData.password;
 
     res.status(200).json({
       success: true,
-      newUser,
+      user: userData,
       message: "Logged in successfully",
     });
   } catch (error) {

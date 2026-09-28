@@ -34,24 +34,27 @@ const SignIn = () => {
   });
 
   async function onSubmit(values) {
-          try {
-              const response = await fetch(`${getEnv('VITE_API_BASE_URL')}/auth/login`, {
-                  method: 'post',
-                  headers: { 'Content-type': 'application/json' },
-                  credentials: 'include',
-                  body: JSON.stringify(values)
-              })
-              const data = await response.json()
-              if (!response.ok) {
-                  return showToast('error', data.message)
-              }
-  
-              navigate(RouteIndex)
-              showToast('success', data.message)
-          } catch (error) {
-              showToast('error', error.message)
-          }
+    try {
+      const response = await fetch(
+        `${getEnv("VITE_API_BASE_URL")}/auth/login`,
+        {
+          method: "post",
+          headers: { "Content-type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(values),
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        return showToast("error", data.message);
       }
+
+      navigate(RouteIndex);
+      showToast("success", data.message);
+    } catch (error) {
+      showToast("error", error.message);
+    }
+  }
 
   return (
     <div className="flex justify-center items-center h-screen w-screen">
