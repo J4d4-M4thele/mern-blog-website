@@ -21,7 +21,7 @@ const GoogleLogin = () => {
     const bodyData = {
       name: user.displayName,
       email: user.email,
-      avatar: user.photoURL,
+      avatar: user.photoURL?.split("=")[0] || user.photoURL,
     };
     try {
       const response = await fetch(

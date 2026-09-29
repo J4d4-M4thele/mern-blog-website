@@ -55,7 +55,7 @@ export const Login = async (req, res, next) => {
       path: "/",
     });
 
-    const newUser = user.toObject({getters: true});
+    const newUser = user.toObject({ getters: true });
     delete newUser.password;
 
     res.status(200).json({
@@ -71,18 +71,20 @@ export const Login = async (req, res, next) => {
 export const GoogleLogin = async (req, res, next) => {
   try {
     const { name, email, avatar } = req.body;
-    let user = await User.findOne({ email });
-
+    let user;
+    user = await User.findOne({ email });
     if (!user) {
-      // Google users never type a password, so store a random hashed one
-      const randomPassword = Math.random().toString(36).slice(-10);
-      const hashedPassword = bcrypt.hashSync(randomPassword, 10);
-      user = await new User({
+      //  create new user
+      const password = Math.random().toString();
+      const hashedPassword = bcryptjs.hashSync(password);
+      const newUser = new User({
         name,
         email,
         password: hashedPassword,
         avatar,
-      }).save();
+      });
+
+      user = await newUser.save();
     }
 
     const token = jwt.sign(
@@ -102,13 +104,30 @@ export const GoogleLogin = async (req, res, next) => {
       path: "/",
     });
 
-    const userData = user.toObject({ getters: true });
-    delete userData.password;
+    const newUser = user.toObject({ getters: true });
+    delete newUser.password;
+    res.status(200).json({
+      success: true,
+      user: newUser,
+      message: "Logged in successfully",
+    });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
+
+export const Logout = async (req, res, next) => {
+  try {
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      path: "/",
+    });
 
     res.status(200).json({
       success: true,
-      user: userData,
-      message: "Logged in successfully",
+      message: "Logged out successfully",
     });
   } catch (error) {
     next(handleError(500, error.message));

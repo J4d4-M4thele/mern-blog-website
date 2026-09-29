@@ -1,11 +1,11 @@
 import React from "react";
 import logo from "@/assets/images/logo-white.png";
 import { Button } from "./ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosLogIn } from "react-icons/io";
 import SearchBox from "./SearchBox";
 import { RouteSignIn } from "@/helpers/RouteName";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,8 +22,40 @@ import { FaRegUser } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
 
+import { removeUser } from "@/redux/user/user.slice";
+import { RouteIndex } from "@/helpers/RouteName";
+import { showToast } from "@/helpers/showToast";
+import { getEnv } from "@/helpers/getEnv";
+
 const Topbar = () => {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(
+        `${getEnv("VITE_API_BASE_URL")}/auth/logout`,
+        {
+          method: "get",
+          headers: { "Content-type": "application/json" },
+          credentials: "include",
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        return showToast("error", data.message);
+      }
+
+      dispatch(removeUser());
+      navigate(RouteIndex);
+      showToast("success", data.message);
+    } catch (error) {
+      showToast("error", error.message);
+    }
+  };
+
   return (
     <div
       className="flex justify-between items-center h-16 fixed w-full 
@@ -48,8 +80,8 @@ const Topbar = () => {
           <DropdownMenu>
             <DropdownMenuTrigger render={<Button variant="outline" />}>
               <Avatar>
-                <AvatarImage src={user.user.avatar || usericon} />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarImage src={user.user.avatar || usericon} referrerPolicy="no-referrer" />
+                <AvatarFallback>JM</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -59,24 +91,22 @@ const Topbar = () => {
                   <p className="text-sm">{user.user.email}</p>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem asChild className="cursor-pointer">
                   <Link to="">
                     <FaRegUser />
                     Profile
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem asChild className="cursor-pointer">
                   <Link to="">
                     <FaPlus />
                     Create Blog
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link to="" className="text-red-500">
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500">
                     <IoLogOutOutline />
                     Sign Out
-                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
@@ -86,5 +116,4 @@ const Topbar = () => {
     </div>
   );
 };
-
 export default Topbar;
