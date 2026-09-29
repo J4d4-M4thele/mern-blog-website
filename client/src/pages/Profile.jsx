@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import usericon from "@/assets/images/user.png";
 import {
@@ -10,23 +10,32 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getEnv } from "@/helpers/getEnv";
-import { useNavigate } from "react-router-dom";
 import { showToast } from "@/helpers/showToast";
 import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
 
 const Profile = () => {
+  const dispatch = useDispatch();
+
   const formSchema = z.object({
+    name: z.string().min(3, "Name must be at least 3 characters long."),
     email: z.string().email(),
-    password: z.string().min(3, "Password is required."),
+    bio: z.string().min(3, "Bio must be at least 3 characters long."),
+    password: z.string(),
   });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
+      bio: "",
       password: "",
     },
   });
@@ -48,7 +57,6 @@ const Profile = () => {
       }
 
       dispatch(setUser(data.user));
-      navigate(RouteIndex);
       showToast("success", data.message);
     } catch (error) {
       showToast("error", error.message);
@@ -56,71 +64,101 @@ const Profile = () => {
   }
 
   return (
-    <Card>
-      <div className="flex justify-center items-center">
-        <Avatar>
-          <AvatarImage src={usericon} referrerPolicy="no-referrer" />
-        </Avatar>
-
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="mb-3">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your email address"
-                        {...field}
-                        className="border-input rounded-md text-sm px-4"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="mb-3">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter your password"
-                        {...field}
-                        className="border-input rounded-md text-sm px-4"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="mt-5">
-              <Button type="submit" className="w-full">
-                Sign In
-              </Button>
-              <div className="mt-5 text-sm flex justify-center items-center gap-2">
-                <p>Don&apos;t have an account?</p>
-                <Link
-                  className="text-blue-500 hover:underline"
-                  to={RouteSignUp}
-                >
-                  Sign Up
-                </Link>
+    <Card className="max-w-screen-md mx-auto">
+      <CardContent className="pt-4">
+        <div className="flex justify-center items-center">
+          <Avatar className="w-28 h-28">
+            <AvatarImage src={usericon} referrerPolicy="no-referrer" />
+          </Avatar>
+        </div>
+        <div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <div className="mb-3">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your username"
+                          {...field}
+                          className="border-input rounded-md text-sm px-4"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-            </div>
-          </form>
-        </Form>
-      </div>
+              <div className="mb-3">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter your email address"
+                          {...field}
+                          className="border-input rounded-md text-sm px-4"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="mb-3">
+                <FormField
+                  control={form.control}
+                  name="bio"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Bio</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Enter your bio"
+                          {...field}
+                          className="border-input rounded-md text-sm px-4"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="mb-3">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="Enter your password"
+                          {...field}
+                          className="border-input rounded-md text-sm px-4"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <Button type="submit" className="w-full">
+                Save Changes
+              </Button>
+            </form>
+          </Form>
+        </div>
+      </CardContent>
     </Card>
   );
 };
