@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import usericon from "@/assets/images/user.png";
@@ -21,8 +21,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useFetch } from "@/hooks/useFetch";
 import Loading from "@/components/Loading";
+import { IoCameraOutline } from "react-icons/io5";
+import Dropzone from "react-dropzone";
 
 const Profile = () => {
+  const [filePreview, setFilePreview] = useState();
+  const [file, setFile] = useState();
 
   const user = useSelector((state) => state.user);
 
@@ -30,11 +34,14 @@ const Profile = () => {
     data: userData,
     loading,
     error,
-  } = useFetch(`${getEnv("VITE_API_BASE_URL")}/user/get-user/${user.user._id}`, {
-    method: "get",
-    credentials: "include",
-  });
-  
+  } = useFetch(
+    `${getEnv("VITE_API_BASE_URL")}/user/get-user/${user.user._id}`,
+    {
+      method: "get",
+      credentials: "include",
+    },
+  );
+
   const dispatch = useDispatch();
 
   const formSchema = z.object({
@@ -52,7 +59,7 @@ const Profile = () => {
       bio: "",
       password: "",
     },
-  }); 
+  });
 
   useEffect(() => {
     if (userData && userData.success) {
@@ -60,19 +67,22 @@ const Profile = () => {
         name: userData.user.name,
         email: userData.user.email,
         bio: userData.user.bio,
-      })
+      });
     }
-  }, [userData])
+  }, [userData]);
 
   async function onSubmit(values) {
     try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('data', JSON.stringify(values));
+
       const response = await fetch(
-        `${getEnv("VITE_API_BASE_URL")}/auth/login`,
+        `${getEnv("VITE_API_BASE_URL")}/user/update-user/${userData.user._id}`,
         {
           method: "post",
-          headers: { "Content-type": "application/json" },
           credentials: "include",
-          body: JSON.stringify(values),
+          body: formData,
         },
       );
       const data = await response.json();
@@ -87,15 +97,45 @@ const Profile = () => {
     }
   }
 
-  if(loading) return <Loading />
+  const handleFileSelection = (files) => {
+    const file = files[0];
+    const preview = URL.createObjectURL(file);
+    setFile(file);
+    setFilePreview(preview);
+  };
+
+  if (loading) return <Loading />;
 
   return (
     <Card className="max-w-screen-md mx-auto">
       <CardContent className="pt-4">
         <div className="flex justify-center items-center">
-          <Avatar className="w-28 h-28">
-            <AvatarImage src={userData?.user.avatar || usericon} referrerPolicy="no-referrer" />
-          </Avatar>
+          <Dropzone
+            onDrop={(acceptedFiles) => handleFileSelection(acceptedFiles)}
+          >
+            {({ getRootProps, getInputProps }) => (
+              <div {...getRootProps()}>
+                <input {...getInputProps()} />
+                <Avatar className="w-28 h-28 relative group">
+                  <AvatarImage
+                    src={
+                      filePreview
+                        ? filePreview
+                        : userData?.user?.avatar || usericon
+                    }
+                    referrerPolicy="no-referrer"
+                  />
+                  <div
+                    className="absolute z-50 w-full h-full top-1/2 left-1/2 -translate-x-1/2 
+            -translate-y-1/2 flex justify-center items-center bg-black/20  
+            border-2 border-violet-500 rounded-full group-hover:flex hidden cursor-pointer"
+                  >
+                    <IoCameraOutline color="#7c3aed" />
+                  </div>
+                </Avatar>
+              </div>
+            )}
+          </Dropzone>
         </div>
         <div>
           <Form {...form}>
