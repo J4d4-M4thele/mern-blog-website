@@ -17,10 +17,25 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getEnv } from "@/helpers/getEnv";
 import { showToast } from "@/helpers/showToast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import { useFetch } from "@/hooks/useFetch";
 
 const Profile = () => {
+
+  const user = useSelector((state) => state.user);
+
+  const {
+    data: userData,
+    loading,
+    error,
+  } = useFetch(`${getEnv("VITE_API_BASE_URL")}/user/get-user/${user.user._id}`, {
+    method: "get",
+    credentials: "include",
+  });
+
+  console.log(userData);
+  
   const dispatch = useDispatch();
 
   const formSchema = z.object({
