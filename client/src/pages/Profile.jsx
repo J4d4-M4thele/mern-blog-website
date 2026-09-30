@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import usericon from "@/assets/images/user.png";
@@ -20,6 +20,7 @@ import { showToast } from "@/helpers/showToast";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useFetch } from "@/hooks/useFetch";
+import Loading from "@/components/Loading";
 
 const Profile = () => {
 
@@ -33,8 +34,6 @@ const Profile = () => {
     method: "get",
     credentials: "include",
   });
-
-  console.log(userData);
   
   const dispatch = useDispatch();
 
@@ -53,7 +52,17 @@ const Profile = () => {
       bio: "",
       password: "",
     },
-  });
+  }); 
+
+  useEffect(() => {
+    if (userData && userData.success) {
+      form.reset({
+        name: userData.user.name,
+        email: userData.user.email,
+        bio: userData.user.bio,
+      })
+    }
+  }, [userData])
 
   async function onSubmit(values) {
     try {
@@ -78,12 +87,14 @@ const Profile = () => {
     }
   }
 
+  if(loading) return <Loading />
+
   return (
     <Card className="max-w-screen-md mx-auto">
       <CardContent className="pt-4">
         <div className="flex justify-center items-center">
           <Avatar className="w-28 h-28">
-            <AvatarImage src={usericon} referrerPolicy="no-referrer" />
+            <AvatarImage src={userData?.user.avatar || usericon} referrerPolicy="no-referrer" />
           </Avatar>
         </div>
         <div>
