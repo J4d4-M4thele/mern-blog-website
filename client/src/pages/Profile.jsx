@@ -23,6 +23,7 @@ import { useFetch } from "@/hooks/useFetch";
 import Loading from "@/components/Loading";
 import { IoCameraOutline } from "react-icons/io5";
 import Dropzone from "react-dropzone";
+import { setUser } from "@/redux/user/user.slice";
 
 const Profile = () => {
   const [filePreview, setFilePreview] = useState();
@@ -48,7 +49,6 @@ const Profile = () => {
     name: z.string().min(3, "Name must be at least 3 characters long."),
     email: z.string().email(),
     bio: z.string().min(3, "Bio must be at least 3 characters long."),
-    password: z.string(),
   });
 
   const form = useForm({
@@ -73,28 +73,24 @@ const Profile = () => {
 
   async function onSubmit(values) {
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('data', JSON.stringify(values));
+            const formData = new FormData()
+            formData.append('file', file)
+            formData.append('data', JSON.stringify(values))
 
-      const response = await fetch(
-        `${getEnv("VITE_API_BASE_URL")}/user/update-user/${userData.user._id}`,
-        {
-          method: "post",
-          credentials: "include",
-          body: formData,
-        },
-      );
-      const data = await response.json();
-      if (!response.ok) {
-        return showToast("error", data.message);
-      }
-
-      dispatch(setUser(data.user));
-      showToast("success", data.message);
-    } catch (error) {
-      showToast("error", error.message);
-    }
+            const response = await fetch(`${getEnv('VITE_API_BASE_URL')}/user/update-user/${userData.user._id}`, {
+                method: 'put',
+                credentials: 'include',
+                body: formData
+            })
+            const data = await response.json()
+            if (!response.ok) {
+                return showToast('error', data.message)
+            }
+            dispath(setUser(data.user))
+            showToast('success', data.message)
+        } catch (error) {
+            showToast('error', error.message)
+        }
   }
 
   const handleFileSelection = (files) => {
