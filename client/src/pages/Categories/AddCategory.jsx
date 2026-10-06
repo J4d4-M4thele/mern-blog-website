@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
@@ -17,6 +18,7 @@ import { RouteSignIn } from "@/helpers/RouteName";
 import { Link, useNavigate } from "react-router-dom";
 import { getEnv } from "@/helpers/getEnv";
 import { showToast } from "@/helpers/showToast";
+import slugify from "slugify";
 
 const AddCategory = () => {
   const formSchema = z.object({
@@ -31,6 +33,15 @@ const AddCategory = () => {
       slug: "",
     },
   });
+
+  const categoryName = form.watch("name");
+
+  useEffect(() => {
+    if (categoryName) {
+      const slug = slugify(categoryName, { lower: true });
+      form.setValue("slug", slug);
+    }
+  }, [categoryName]);
 
   async function onSubmit(values) {
     // try {
@@ -52,60 +63,60 @@ const AddCategory = () => {
     //   showToast("error", error.message);
     // }
   }
-  
+
   return (
-      <div>
-        <Card className="pt-5 max-w-screen-md mx-auto">
+    <div>
+      <Card className="pt-5 max-w-screen-md mx-auto">
         <CardContent>
           <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="mb-3">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Category Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter the category name"
-                        {...field}
-                        className="border-input rounded-md text-sm px-4"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="mb-3">
-              <FormField
-                control={form.control}
-                name="slug"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Category Slug</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter the category slug"
-                        {...field}
-                        className="border-input rounded-md text-sm px-4"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <div className="mb-3">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter the category name"
+                          {...field}
+                          className="border-input rounded-md text-sm px-4"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="mb-3">
+                <FormField
+                  control={form.control}
+                  name="slug"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category Slug</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter the category slug"
+                          {...field}
+                          className="border-input rounded-md text-sm px-4"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-            <Button type="submit" className="w-full">
-              Create
-            </Button>
-          </form>
-        </Form>
+              <Button type="submit" className="w-full">
+                Create
+              </Button>
+            </form>
+          </Form>
         </CardContent>
       </Card>
-      </div>
+    </div>
   );
 };
 
