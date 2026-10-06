@@ -1,9 +1,112 @@
-import React from 'react'
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { RouteSignIn } from "@/helpers/RouteName";
+import { Link, useNavigate } from "react-router-dom";
+import { getEnv } from "@/helpers/getEnv";
+import { showToast } from "@/helpers/showToast";
 
 const AddCategory = () => {
-  return (
-    <div>AddCategory</div>
-  )
-}
+  const formSchema = z.object({
+    name: z.string().min(3, "Name must be at least 3 character long."),
+    slug: z.string().min(3, "Slug must be at least 3 character long."),
+  });
 
-export default AddCategory
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      slug: "",
+    },
+  });
+
+  async function onSubmit(values) {
+    // try {
+    //   const response = await fetch(
+    //     `${getEnv("VITE_API_BASE_URL")}/auth/register`,
+    //     {
+    //       method: "post",
+    //       headers: { "Content-type": "application/json" },
+    //       body: JSON.stringify(values),
+    //     },
+    //   );
+    //   const data = await response.json();
+    //   if (!response.ok) {
+    //     return showToast("error", data.message);
+    //   }
+    //   navigate(RouteSignIn);
+    //   showToast("success", data.message);
+    // } catch (error) {
+    //   showToast("error", error.message);
+    // }
+  }
+  
+  return (
+      <div>
+        <Card className="pt-5 max-w-screen-md mx-auto">
+        <CardContent>
+          <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <div className="mb-3">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter the category name"
+                        {...field}
+                        className="border-input rounded-md text-sm px-4"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="mb-3">
+              <FormField
+                control={form.control}
+                name="slug"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category Slug</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter the category slug"
+                        {...field}
+                        className="border-input rounded-md text-sm px-4"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <Button type="submit" className="w-full">
+              Create
+            </Button>
+          </form>
+        </Form>
+        </CardContent>
+      </Card>
+      </div>
+  );
+};
+
+export default AddCategory;

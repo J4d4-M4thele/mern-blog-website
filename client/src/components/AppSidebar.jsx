@@ -17,6 +17,7 @@ import { GrBlog } from "react-icons/gr";
 import { FaRegComments } from "react-icons/fa6";
 import { FiUsers } from "react-icons/fi";
 import { GoDot } from "react-icons/go";
+import { RouteCategoryDetails } from "@/helpers/RouteName";
 
 const AppSidebar = () => {
   return (
@@ -28,52 +29,54 @@ const AppSidebar = () => {
       <SidebarContent className="bg-white">
         <SidebarGroup />
         <SidebarMenu>
-            <SidebarMenuItem>
-                <SidebarMenuButton>
-                    <IoHomeOutline />
-                    <Link to="">Home</Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-                <SidebarMenuButton>
-                    <BiCategoryAlt />
-                    <Link to="">Categories</Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-                <SidebarMenuButton>
-                    <GrBlog />
-                    <Link to="">Blogs</Link>
-                </SidebarMenuButton>         
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-                <SidebarMenuButton>
-                    <FaRegComments />
-                    <Link to="">Comments</Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-                <SidebarMenuButton>
-                    <FiUsers />
-                    <Link to="">Users</Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <IoHomeOutline />
+              <Link to="">Home</Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <BiCategoryAlt />
+              <Link to={RouteCategoryDetails}>Categories</Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <GrBlog />
+              <Link to="">Blogs</Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <FaRegComments />
+              <Link to="">Comments</Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <FiUsers />
+              <Link to="">Users</Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
         <SidebarGroup />
 
         <SidebarGroup />
-        <SidebarGroupLabel>Categories</SidebarGroupLabel>
+        <SidebarGroupLabel>
+          <BiCategoryAlt />
+          Categories
+        </SidebarGroupLabel>
         <SidebarMenu>
-            <SidebarMenuItem>
-                <SidebarMenuButton>
-                    <GoDot />
-                    <Link to="">Category Item</Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <GoDot />
+              <Link to="">Category Item</Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
         <SidebarGroup />
       </SidebarContent>
-
     </Sidebar>
   );
 };
