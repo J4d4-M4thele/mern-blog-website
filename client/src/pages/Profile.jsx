@@ -73,24 +73,28 @@ const Profile = () => {
 
   async function onSubmit(values) {
     try {
-            const formData = new FormData()
-            formData.append('file', file)
-            formData.append('data', JSON.stringify(values))
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("data", JSON.stringify(values));
 
-            const response = await fetch(`${getEnv('VITE_API_BASE_URL')}/user/update-user/${userData.user._id}`, {
-                method: 'put',
-                credentials: 'include',
-                body: formData
-            })
-            const data = await response.json()
-            if (!response.ok) {
-                return showToast('error', data.message)
-            }
-            dispath(setUser(data.user))
-            showToast('success', data.message)
-        } catch (error) {
-            showToast('error', error.message)
-        }
+      const response = await fetch(
+        `${getEnv("VITE_API_BASE_URL")}/user/update-user/${userData.user._id}`,
+        {
+          method: "put",
+          credentials: "include",
+          body: formData,
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        return showToast("error", data.message);
+      }
+      dispatch(setUser(data.user));
+      showToast("success", data.message);
+    } catch (error) {
+      showToast("error", error.message);
+      console.error(error);
+    }
   }
 
   const handleFileSelection = (files) => {
