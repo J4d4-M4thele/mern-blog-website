@@ -98,7 +98,7 @@ const AddCategory = () => {
                       <FormLabel>Category Slug</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter the category slug"
+                          placeholder="Category slug"
                           {...field}
                           className="border-input rounded-md text-sm px-4"
                         />
