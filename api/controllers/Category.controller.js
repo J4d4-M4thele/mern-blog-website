@@ -27,6 +27,10 @@ export const showCategory = async (req, res, next) => {
 
 export const getAllCategories = async (req, res, next) => {
     try {
+      const categories = await Category.find().sort({name: 1}).lean().exec();
+      res.status(200).json({
+        categories,
+      });
   } catch (error) {
     next(handleError(500, error.message));
   }
