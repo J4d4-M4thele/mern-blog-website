@@ -9,7 +9,7 @@ export const addCategory = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Category added successfully",
+      message: "Category created successfully",
       category,
     });
   } catch (error) {
@@ -18,6 +18,14 @@ export const addCategory = async (req, res, next) => {
 };
 
 export const showCategory = async (req, res, next) => {
+    try {
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
+
+
+export const getAllCategories = async (req, res, next) => {
     try {
   } catch (error) {
     next(handleError(500, error.message));

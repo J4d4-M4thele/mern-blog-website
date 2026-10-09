@@ -14,8 +14,6 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { RouteSignIn } from "@/helpers/RouteName";
-import { Link, useNavigate } from "react-router-dom";
 import { getEnv } from "@/helpers/getEnv";
 import { showToast } from "@/helpers/showToast";
 import slugify from "slugify";
@@ -44,24 +42,24 @@ const AddCategory = () => {
   }, [categoryName]);
 
   async function onSubmit(values) {
-    // try {
-    //   const response = await fetch(
-    //     `${getEnv("VITE_API_BASE_URL")}/auth/register`,
-    //     {
-    //       method: "post",
-    //       headers: { "Content-type": "application/json" },
-    //       body: JSON.stringify(values),
-    //     },
-    //   );
-    //   const data = await response.json();
-    //   if (!response.ok) {
-    //     return showToast("error", data.message);
-    //   }
-    //   navigate(RouteSignIn);
-    //   showToast("success", data.message);
-    // } catch (error) {
-    //   showToast("error", error.message);
-    // }
+    try {
+      const response = await fetch(
+        `${getEnv("VITE_API_BASE_URL")}/category/add`,
+        {
+          method: "post",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify(values),
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        return showToast("error", data.message);
+      }
+      form.reset();
+      showToast("success", data.message);
+    } catch (error) {
+      showToast("error", error.message);
+    }
   }
 
   return (
