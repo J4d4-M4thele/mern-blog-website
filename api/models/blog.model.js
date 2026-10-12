@@ -22,16 +22,16 @@ const blogSchema = new mongoose.Schema({
         trim: true,
         unique: true,
     },
+    featuredImage: {
+        type: String,
+        required: true,
+        trim: true,
+    },
     blogContent: {
         type: String,
         required: true,
         trim: true,
-    },
-    feauturedImage: {
-        type: String,
-        required: true,
-        trim: true,
-    },
+    }
 }, { timestamps: true });
 
 const Blog = mongoose.model('Blog', blogSchema, 'blogs');
