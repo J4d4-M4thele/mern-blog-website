@@ -19,8 +19,12 @@ import { showToast } from "@/helpers/showToast";
 import slugify from "slugify";
 import { useParams } from "react-router-dom";
 import { useFetch } from "@/hooks/useFetch";
+import { useNavigate } from "react-router-dom";
+import { RouteCategoryDetails } from "@/helpers/RouteName";
 
 const EditCategory = () => {
+
+  const navigate = useNavigate();
   const {category_id} = useParams();
 
   const {data: categoryData, loading, error} = useFetch(`${getEnv("VITE_API_BASE_URL")}/category/show/${category_id}`, {
@@ -77,6 +81,7 @@ const EditCategory = () => {
         if (!response.ok) {
           return showToast("error", data.message);
         }
+        navigate(RouteCategoryDetails);
         showToast("success", data.message);
       } catch (error) {
         showToast("error", error.message);
