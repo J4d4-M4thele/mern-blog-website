@@ -41,7 +41,7 @@ const EditCategory = () => {
       },
     });
 
-    const categories = categoryData?.categories ?? [];
+    // const categories = categoryData?.categories ?? [];
 
     const categoryName = form.watch("name");
 
@@ -53,11 +53,13 @@ const EditCategory = () => {
       
     }, [categoryName]);
 
+    console.log(categoryData);
+
     useEffect(() => {
-      if(categories.length > 0) {
-        console.log("Category data:", categories);
-        form.setValue("name", categories[0].name);
-        form.setValue("slug", categories[0].slug);
+      if(categoryData) {
+        console.log("Category data:", categoryData.category);
+        form.setValue("name", categoryData.category.name);
+        form.setValue("slug", categoryData.category.slug);
       }
     },[categoryData]);
   
@@ -75,7 +77,6 @@ const EditCategory = () => {
         if (!response.ok) {
           return showToast("error", data.message);
         }
-        form.reset();
         showToast("success", data.message);
       } catch (error) {
         showToast("error", error.message);
@@ -128,7 +129,7 @@ const EditCategory = () => {
                 </div>
   
                 <Button type="submit" className="w-full">
-                  Create
+                  Update
                 </Button>
               </form>
             </Form>
