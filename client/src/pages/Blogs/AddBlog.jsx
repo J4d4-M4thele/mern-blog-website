@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 import { RouteBlogDetails } from "@/helpers/RouteName";
 import { useFetch } from "@/hooks/useFetch";
 import Dropzone from "react-dropzone";
+import Editor from "@/components/Editor";
 
 const AddBlog = () => {
   const [filePreview, setFilePreview] = useState();
@@ -68,6 +69,8 @@ const AddBlog = () => {
       form.setValue("slug", slug);
     }
   }, [blogTitle]);
+
+  const handleEditorData = (event, editor) => {};
 
   async function onSubmit(values) {
     // try {
@@ -187,6 +190,26 @@ const AddBlog = () => {
                     </div>
                   )}
                 </Dropzone>
+              </div>
+              <div className="mb-3">
+                <FormField
+                  control={form.control}
+                  name="blogContent"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Blog Content</FormLabel>
+                      <FormControl>
+                        <Editor
+                          props={{
+                            initialData: "",
+                            onChange: handleEditorData,
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
 
               <Button type="submit" className="w-full">
