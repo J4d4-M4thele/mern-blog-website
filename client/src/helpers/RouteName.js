@@ -13,3 +13,13 @@ export const RouteEditCategory = (category_id) => {
         return '/category/update/:category_id';
     }
 };
+
+export const RouteBlogDetails = '/all-blogs';
+export const RouteAddBlog = '/blog/add';
+export const RouteEditBlog = (blog_id) => {
+    if (blog_id) {
+        return `/blog/update/${blog_id}`;
+    }else {
+        return '/blog/update/:blog_id';
+    }
+};
