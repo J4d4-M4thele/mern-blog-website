@@ -70,9 +70,13 @@ const AddBlog = () => {
     }
   }, [blogTitle]);
 
-  const handleEditorData = (event, editor) => {};
+  const handleEditorData = (event, editor) => {
+    const data = editor.getData();
+    form.setValue("blogContent", data);
+  };
 
   async function onSubmit(values) {
+    console.log("Form Values:", values);
     // try {
     //   const response = await fetch(
     //     `${getEnv("VITE_API_BASE_URL")}/category/add`,
@@ -115,7 +119,7 @@ const AddBlog = () => {
                     <FormItem>
                       <FormLabel>Category</FormLabel>
                       <FormControl>
-                        <Select>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <SelectTrigger>
                             <SelectValue placeholder="Select a category" />
                           </SelectTrigger>
