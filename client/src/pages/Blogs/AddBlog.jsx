@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState, useSelector } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
@@ -30,6 +30,7 @@ import { RouteBlogDetails } from "@/helpers/RouteName";
 import { useFetch } from "@/hooks/useFetch";
 import Dropzone from "react-dropzone";
 import Editor from "@/components/Editor";
+import { useSelector } from "react-redux";
 
 const AddBlog = () => {
   const user = useSelector((state) => state.user);
@@ -79,24 +80,27 @@ const AddBlog = () => {
 
   async function onSubmit(values) {
     try {
-      const newValues = { ...values, author: user._id };
+      const newValues = { ...values, author: user.user._id };
+      if (!file) {
+        return showToast("error", "Please select a featured image.");
+      }
       const formData = new FormData();
       formData.append("file", file);
       formData.append("data", JSON.stringify(newValues));
 
-      const response = await fetch(
-        `${getEnv("VITE_API_BASE_URL")}/blog/add/${userData.user._id}`,
-        {
-          method: "post",
-          credentials: "include",
-          body: formData,
-        },
-      );
+      const response = await fetch(`${getEnv("VITE_API_BASE_URL")}/blog/add`, {
+        method: "post",
+        credentials: "include",
+        body: formData,
+      });
       const data = await response.json();
       if (!response.ok) {
         return showToast("error", data.message);
       }
-      dispatch(setUser(data.user));
+      form.reset();
+      setFile(null);
+      setFilePreview(null);
+      navigate(RouteBlogDetails);
       showToast("success", data.message);
     } catch (error) {
       showToast("error", error.message);
@@ -198,7 +202,7 @@ const AddBlog = () => {
                     <div {...getRootProps()}>
                       <input {...getInputProps()} />
                       <div className="flex items-center justify-center w-36 h-28 border-2 border-dashed rounded">
-                        <img src={filePreview} alt="Preview" />
+                        <img src={filePreview} />
                       </div>
                     </div>
                   )}
