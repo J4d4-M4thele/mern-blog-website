@@ -48,7 +48,7 @@ export const showBlog = async (req, res, next) => {
   }
 };
 
-export const showAllBlogs = async (req, res, next) => {
+export const getAllBlogs = async (req, res, next) => {
   try {
   } catch (error) {
     next(handleError(500, error.message));

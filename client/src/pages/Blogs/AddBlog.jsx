@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSelector } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
@@ -32,6 +32,8 @@ import Dropzone from "react-dropzone";
 import Editor from "@/components/Editor";
 
 const AddBlog = () => {
+  const user = useSelector((state) => state.user);
+
   const [filePreview, setFilePreview] = useState();
   const [file, setFile] = useState();
   const {
@@ -77,28 +79,29 @@ const AddBlog = () => {
 
   async function onSubmit(values) {
     try {
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("data", JSON.stringify(values));
-    
-          const response = await fetch(
-            `${getEnv("VITE_API_BASE_URL")}/user/update-user/${userData.user._id}`,
-            {
-              method: "put",
-              credentials: "include",
-              body: formData,
-            },
-          );
-          const data = await response.json();
-          if (!response.ok) {
-            return showToast("error", data.message);
-          }
-          dispatch(setUser(data.user));
-          showToast("success", data.message);
-        } catch (error) {
-          showToast("error", error.message);
-          console.error(error);
-        }
+      const newValues = { ...values, author: user._id };
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("data", JSON.stringify(newValues));
+
+      const response = await fetch(
+        `${getEnv("VITE_API_BASE_URL")}/blog/add/${userData.user._id}`,
+        {
+          method: "post",
+          credentials: "include",
+          body: formData,
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        return showToast("error", data.message);
+      }
+      dispatch(setUser(data.user));
+      showToast("success", data.message);
+    } catch (error) {
+      showToast("error", error.message);
+      console.error(error);
+    }
   }
 
   const handleFileSelection = (files) => {
@@ -122,7 +125,10 @@ const AddBlog = () => {
                     <FormItem>
                       <FormLabel>Category</FormLabel>
                       <FormControl>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select a category" />
                           </SelectTrigger>
