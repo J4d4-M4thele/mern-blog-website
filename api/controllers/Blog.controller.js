@@ -50,6 +50,11 @@ export const showBlog = async (req, res, next) => {
 
 export const getAllBlogs = async (req, res, next) => {
   try {
+    const blogs = await Blog.find().populate("author", "name").populate("category", "name").sort({ createdAt: -1 }).lean().exec();
+    res.status(200).json({
+      success: true,
+      blogs,
+    });
   } catch (error) {
     next(handleError(500, error.message));
   }
