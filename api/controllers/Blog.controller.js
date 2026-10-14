@@ -50,7 +50,12 @@ export const showBlog = async (req, res, next) => {
 
 export const getAllBlogs = async (req, res, next) => {
   try {
-    const blogs = await Blog.find().populate("author", "name").populate("category", "name").sort({ createdAt: -1 }).lean().exec();
+    const blogs = await Blog.find()
+      .populate("author", "name")
+      .populate("category", "name")
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
     res.status(200).json({
       success: true,
       blogs,
@@ -62,6 +67,17 @@ export const getAllBlogs = async (req, res, next) => {
 
 export const updateBlog = async (req, res, next) => {
   try {
+    const { blogid } = req.params;
+    const blog = await Blog.findByIdAndUpdate(blogid).populate(
+      "category",
+      "name",
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Blog updated successfully",
+      blog,
+    });
   } catch (error) {
     next(handleError(500, error.message));
   }
@@ -69,6 +85,12 @@ export const updateBlog = async (req, res, next) => {
 
 export const deleteBlog = async (req, res, next) => {
   try {
+    const { blogid } = req.params;
+    await Blog.findByIdAndDelete(blogid);
+    res.status(200).json({
+      success: true,
+      message: "Blog deleted successfully",
+    });
   } catch (error) {
     next(handleError(500, error.message));
   }

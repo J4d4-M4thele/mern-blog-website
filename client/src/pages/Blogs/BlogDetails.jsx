@@ -111,7 +111,7 @@ const BlogDetails = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center">
+                  <TableCell colSpan={6} className="text-center">
                     No data found
                   </TableCell>
                 </TableRow>
