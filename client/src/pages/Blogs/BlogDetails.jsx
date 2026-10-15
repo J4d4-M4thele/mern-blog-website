@@ -85,7 +85,7 @@ const BlogDetails = () => {
                     <TableCell>{blog.category.name}</TableCell>
                     <TableCell>{blog.title}</TableCell>
                     <TableCell>{blog.slug}</TableCell>
-                    <TableCell>{moment(blog.createdAt).format("DD-MM-YYYY")}</TableCell>
+                    <TableCell>{moment(blog.updatedAt).format("DD-MM-YYYY")}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Button

@@ -41,25 +41,16 @@ export const addBlog = async (req, res, next) => {
   }
 };
 
-export const showBlog = async (req, res, next) => {
+export const editBlog = async (req, res, next) => {
   try {
-  } catch (error) {
-    next(handleError(500, error.message));
-  }
-};
-
-export const getAllBlogs = async (req, res, next) => {
-  try {
-    const blogs = await Blog.find()
-      .populate("author", "name")
-      .populate("category", "name")
-      .sort({ createdAt: -1 })
-      .lean()
-      .exec();
+    const {blogid} = req.params;
+    const blog = await Blog.findById(blogid).populate("category", "name")
+    if(!blog) {
+      next(handleError(404, "Data not found"))
+    }
     res.status(200).json({
-      success: true,
-      blogs,
-    });
+      blog
+    })
   } catch (error) {
     next(handleError(500, error.message));
   }
@@ -100,6 +91,23 @@ export const updateBlog = async (req, res, next) => {
       success: true,
       message: "Blog updated successfully",
       blog,
+    });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
+
+export const getAllBlogs = async (req, res, next) => {
+  try {
+    const blogs = await Blog.find()
+      .populate("author", "name")
+      .populate("category", "name")
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
+    res.status(200).json({
+      success: true,
+      blogs,
     });
   } catch (error) {
     next(handleError(500, error.message));

@@ -45,7 +45,7 @@ const EditBlog = () => {
   );
 
   const { data: blogData, loading: blogLoading } = useFetch(
-    `${getEnv("VITE_API_BASE_URL")}/blog/update/${blog_id}`,
+    `${getEnv("VITE_API_BASE_URL")}/blog/edit/${blog_id}`,
     {
       method: "get",
       credentials: "include",
@@ -56,7 +56,9 @@ const EditBlog = () => {
   const [filePreview, setPreview] = useState();
   const [file, setFile] = useState();
 
-  const categories = Array.isArray(categoryData) ? categoryData : categoryData?.category ?? categoryData?.categories ?? [];
+  const categories = Array.isArray(categoryData)
+    ? categoryData
+    : (categoryData?.category ?? categoryData?.categories ?? []);
 
   const formSchema = z.object({
     category: z.string().min(3, "Category must be at least 3 character long."),
@@ -104,6 +106,11 @@ const EditBlog = () => {
 
   async function onSubmit(values) {
     try {
+      // const newValues = { ...values, author: user.user._id };
+      // if (!file) {
+      //   showToast("error", "Feature Image is required");
+      // }
+
       const formData = new FormData();
       formData.append("file", file);
       formData.append("data", JSON.stringify(values));
@@ -162,13 +169,13 @@ const EditBlog = () => {
                           </SelectTrigger>
                           <SelectContent>
                             {categories.map((category) => (
-                                <SelectItem
-                                  key={category._id}
-                                  value={category._id}
-                                >
-                                  {category.name}
-                                </SelectItem>
-                              ))}
+                              <SelectItem
+                                key={category._id}
+                                value={category._id}
+                              >
+                                {category.name}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -185,8 +192,11 @@ const EditBlog = () => {
                     <FormItem>
                       <FormLabel>Title</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter blog title" {...field} 
-                        className="border-input rounded-md text-sm px-4"/>
+                        <Input
+                          placeholder="Enter blog title"
+                          {...field}
+                          className="border-input rounded-md text-sm px-4"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -201,8 +211,11 @@ const EditBlog = () => {
                     <FormItem>
                       <FormLabel>Slug</FormLabel>
                       <FormControl>
-                        <Input placeholder="Title slug" {...field} 
-                        className="border-input rounded-md text-sm px-4"/>
+                        <Input
+                          placeholder="Title slug"
+                          {...field}
+                          className="border-input rounded-md text-sm px-4"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
