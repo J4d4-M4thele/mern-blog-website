@@ -12,7 +12,6 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -164,7 +163,7 @@ const AddBlog = () => {
                       <FormLabel>Title</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter the blog title"
+                          placeholder="Enter blog title"
                           {...field}
                           className="border-input rounded-md text-sm px-4"
                         />

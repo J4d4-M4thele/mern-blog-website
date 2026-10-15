@@ -1,6 +1,4 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   FormControl,
@@ -9,50 +7,45 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import slugify from "slugify";
+import { showToast } from "@/helpers/showToast";
+import { getEnv } from "@/helpers/getEnv";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { getEnv } from "@/helpers/getEnv";
-import { showToast } from "@/helpers/showToast";
-import slugify from "slugify";
-import { useParams } from "react-router-dom";
 import { useFetch } from "@/hooks/useFetch";
-import { useNavigate } from "react-router-dom";
-import { RouteBlogDetails } from "@/helpers/RouteName";
 import Dropzone from "react-dropzone";
 import Editor from "@/components/Editor";
 import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { RouteBlogDetails } from "@/helpers/RouteName";
+import { decode } from "entities";
+import Loading from "@/components/Loading";
 
 const EditBlog = () => {
+  const { blog_id } = useParams();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
+  const { data: categoryData } = useFetch(
+    `${getEnv("VITE_API_BASE_URL")}/category/all-categories`,
+    {
+      method: "get",
+      credentials: "include",
+    },
+  );
 
-  const { blog_id } = useParams();
-
-  const [filePreview, setFilePreview] = useState();
-  const [file, setFile] = useState();
-
-  const {
-    data: categoryData,
-    loading,
-    error,
-  } = useFetch(`${getEnv("VITE_API_BASE_URL")}/category/all-categories`, {
-    method: "get",
-    credentials: "include",
-  });
-
-  const { data: blogData } = useFetch(
-    `${getEnv("VITE_API_BASE_URL")}/blog/show/${blog_id}`,
+  const { data: blogData, loading: blogLoading } = useFetch(
+    `${getEnv("VITE_API_BASE_URL")}/blog/update/${blog_id}`,
     {
       method: "get",
       credentials: "include",
@@ -60,13 +53,18 @@ const EditBlog = () => {
     [blog_id],
   );
 
-  console.log(blogData);
+  const [filePreview, setPreview] = useState();
+  const [file, setFile] = useState();
+
+  const categories = Array.isArray(categoryData) ? categoryData : categoryData?.category ?? categoryData?.categories ?? [];
 
   const formSchema = z.object({
-    category: z.string().min(3, "Category is required."),
+    category: z.string().min(3, "Category must be at least 3 character long."),
     title: z.string().min(3, "Title must be at least 3 character long."),
     slug: z.string().min(3, "Slug must be at least 3 character long."),
-    blogContent: z.string().min(3, "Blog content is required."),
+    blogContent: z
+      .string()
+      .min(3, "Blog content must be at least 3 character long."),
   });
 
   const form = useForm({
@@ -81,12 +79,19 @@ const EditBlog = () => {
 
   useEffect(() => {
     if (blogData) {
+      setPreview(blogData.blog.featuredImage);
       form.setValue("category", blogData.blog.category._id);
       form.setValue("title", blogData.blog.title);
+      form.setValue("slug", blogData.blog.title);
       form.setValue("slug", blogData.blog.slug);
-      form.setValue("blogContent", blogData.blog.blogContent);
+      form.setValue("blogContent", decode(blogData.blog.blogContent));
     }
   }, [blogData]);
+
+  const handleEditorData = (event, editor) => {
+    const data = editor.getData();
+    form.setValue("blogContent", data);
+  };
 
   const blogTitle = form.watch("title");
 
@@ -97,36 +102,47 @@ const EditBlog = () => {
     }
   }, [blogTitle]);
 
-  const handleEditorData = (event, editor) => {
-    const data = editor.getData();
-    form.setValue("blogContent", data);
-  };
-
   async function onSubmit(values) {
     try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("data", JSON.stringify(values));
+
       const response = await fetch(
         `${getEnv("VITE_API_BASE_URL")}/blog/update/${blog_id}`,
         {
           method: "put",
-          headers: { "Content-type": "application/json" },
-          body: JSON.stringify(values),
+          credentials: "include",
+          body: formData,
         },
       );
       const data = await response.json();
       if (!response.ok) {
         return showToast("error", data.message);
       }
-      navigate(RouteCategoryDetails);
+      form.reset();
+      setFile();
+      setPreview();
+      navigate(RouteBlogDetails);
       showToast("success", data.message);
     } catch (error) {
       showToast("error", error.message);
     }
   }
 
+  const handleFileSelection = (files) => {
+    const file = files[0];
+    const preview = URL.createObjectURL(file);
+    setFile(file);
+    setPreview(preview);
+  };
+
+  if (blogLoading || !blogData) return <Loading />;
   return (
     <div>
       <Card className="pt-5">
         <CardContent>
+          <h1 className="text-2xl font-bold mb-4">Edit Blog</h1>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="mb-3">
@@ -145,9 +161,7 @@ const EditBlog = () => {
                             <SelectValue placeholder="Select a category" />
                           </SelectTrigger>
                           <SelectContent>
-                            {categoryData &&
-                              categoryData.categories.length > 0 &&
-                              categoryData.categories.map((category) => (
+                            {categories.map((category) => (
                                 <SelectItem
                                   key={category._id}
                                   value={category._id}
@@ -171,11 +185,8 @@ const EditBlog = () => {
                     <FormItem>
                       <FormLabel>Title</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter the blog title"
-                          {...field}
-                          className="border-input rounded-md text-sm px-4"
-                        />
+                        <Input placeholder="Enter blog title" {...field} 
+                        className="border-input rounded-md text-sm px-4"/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -188,13 +199,10 @@ const EditBlog = () => {
                   name="slug"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Title Slug</FormLabel>
+                      <FormLabel>Slug</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Title slug"
-                          {...field}
-                          className="border-input rounded-md text-sm px-4"
-                        />
+                        <Input placeholder="Title slug" {...field} 
+                        className="border-input rounded-md text-sm px-4"/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -209,7 +217,7 @@ const EditBlog = () => {
                   {({ getRootProps, getInputProps }) => (
                     <div {...getRootProps()}>
                       <input {...getInputProps()} />
-                      <div className="flex items-center justify-center w-36 h-28 border-2 border-dashed rounded">
+                      <div className="flex justify-center items-center w-36 h-28 border-2 border-dashed rounded">
                         <img src={filePreview} />
                       </div>
                     </div>
@@ -226,7 +234,7 @@ const EditBlog = () => {
                       <FormControl>
                         <Editor
                           props={{
-                            initialData: "",
+                            initialData: field.value,
                             onChange: handleEditorData,
                           }}
                         />

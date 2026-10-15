@@ -68,10 +68,33 @@ export const getAllBlogs = async (req, res, next) => {
 export const updateBlog = async (req, res, next) => {
   try {
     const { blogid } = req.params;
-    const blog = await Blog.findByIdAndUpdate(blogid).populate(
-      "category",
-      "name",
-    );
+    const data = JSON.parse(req.body.data);
+
+    const blog = await Blog.findByIdAndUpdate(blogid);
+
+    blog.category = data.category;
+    blog.title = data.title;
+    blog.slug = data.slug;
+    blog.blogContent = encode(data.blogContent);
+
+    let featuredImage = blog.featuredImage;
+
+    if (req.file) {
+      const uploadResult = await cloudinary.uploader
+        .upload(req.file.path, {
+          folder: "blog-uploads",
+          resource_type: "auto",
+        })
+        .catch((error) => {
+          next(handleError(500, error.message));
+        });
+
+      featuredImage = uploadResult.secure_url;
+    }
+
+    blog.featuredImage = featuredImage;
+
+    await blog.save();
 
     res.status(200).json({
       success: true,
