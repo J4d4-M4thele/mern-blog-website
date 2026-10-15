@@ -106,11 +106,6 @@ const EditBlog = () => {
 
   async function onSubmit(values) {
     try {
-      // const newValues = { ...values, author: user.user._id };
-      // if (!file) {
-      //   showToast("error", "Feature Image is required");
-      // }
-
       const formData = new FormData();
       formData.append("file", file);
       formData.append("data", JSON.stringify(values));
