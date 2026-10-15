@@ -4,34 +4,41 @@ import { Badge } from "@/components/ui/badge";
 import { useSelector } from "react-redux";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { FaRegCalendarAlt } from "react-icons/fa";
+import usericon from "@/assets/images/user.png";
+import moment from "moment";
 
-const BlogCard = () => {
-  const user = useSelector((state) => state.user);
+const BlogCard = ({ props }) => {
+  console.log(props);
   return (
     <Card className="pt-5">
       <CardContent>
         <div className="flex items-center justify-between">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center gap-2">
             <Avatar>
-              <AvatarImage src="" />
-              <span>Username</span>
+              <AvatarImage
+                src={props.author?.avatar || usericon}
+                referrerPolicy="no-referrer"
+              />
             </Avatar>
+            <span>{props.author?.name}</span>
           </div>
-          {user && user.user.role === "admin" && (
-            <Badge variant="outline" className="bg-violet-500">
+          {props.author.role === "admin" && (
+            <Badge variant="outline" className="bg-violet-500 text-white">
               Admin
             </Badge>
           )}
         </div>
 
-        <div></div>
+        <div className="my-2">
+          <img src={props.featuredImage} className="rounded" />
+        </div>
 
         <div>
-          <p>
+          <p className="flex items-center gap-2 mb-2">
             <FaRegCalendarAlt />
-            <span>Date</span>
+            <span>{moment(props.updatedAt).format("DD-MM-YYYY")}</span>
           </p>
-          <h2 className="text-2xl font-bold line-clamp-2">Title</h2>
+          <h2 className="text-2xl font-bold line-clamp-2">{props.title}</h2>
         </div>
       </CardContent>
     </Card>
