@@ -118,7 +118,7 @@ export const getAllBlogs = async (req, res, next) => {
   try {
     const blogs = await Blog.find()
       .populate("author", "name avatar role")
-      .populate("category", "name")
+      .populate("category", "name slug")
       .sort({ createdAt: -1 })
       .lean()
       .exec();
