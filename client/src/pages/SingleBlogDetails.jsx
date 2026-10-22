@@ -6,6 +6,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { decode } from "entities";
 import Comment from "@/components/Comment";
+import CommentList from "@/components/CommentList";
 
 const SingleBlogDetails = () => {
   const { blog } = useParams();
@@ -41,7 +42,11 @@ const SingleBlogDetails = () => {
               }}
             ></div>
             <div className="border-t mt-5 pt-5 text-2xl">
-              <Comment />
+              <Comment props={{ blogId: data.blog._id }} />
+            </div>
+
+            <div>
+              <CommentList props={{ blogId: data.blog._id }} />
             </div>
           </div>
         </>
