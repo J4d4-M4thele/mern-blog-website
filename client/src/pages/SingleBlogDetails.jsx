@@ -1,57 +1,63 @@
-import Loading from "@/components/Loading";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { getEnv } from "@/helpers/getEnv";
-import { useFetch } from "@/hooks/useFetch";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { decode } from "entities";
+import Loading from "@/components/Loading";
 import Comment from "@/components/Comment";
-import CommentList from "@/components/CommentList";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import usericon from "@/assets/images/user.png";
+import { getEnv } from "@/helpers/getEnv";
+import { useFetch } from "@/hooks/useFetch";
 
 const SingleBlogDetails = () => {
   const { blog } = useParams();
-  const { data, loading, error } = useFetch(
+
+  const { data, loading } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/blog/get-blog/${blog}`,
-    {
-      method: "get",
-      credentials: "include",
-    },
+    { method: "get", credentials: "include" },
+    [blog], // refetch when the slug changes
   );
 
   if (loading) return <Loading />;
-  return (
-    <div className="flex justify-between gap-20">
-      {data && data.blog && (
-        <>
-          <div className="border rounded w-[70%] p-5">
-            <h1 className="text-2xl font-bold mb-5">{data.blog.title}</h1>
-            <div className="flex justify-between items-center">
-              <div className="flex justify-between items-center gap-5">
-                <Avatar>
-                  <AvatarImage src={data.blog.author.avatar} />
-                </Avatar>
-                <span>{data.blog.author.name}</span>
-              </div>
-            </div>
-            <div className="my-5">
-              <img src={data.blog.featuredImage} className="rounded" />
-            </div>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: decode(data.blog.blogContent || "")
-              }}
-            ></div>
-            <div className="border-t mt-5 pt-5 text-2xl">
-              <Comment props={{ blogId: data.blog._id }} />
-            </div>
 
-            <div>
-              <CommentList props={{ blogId: data.blog._id }} />
-            </div>
+  const post = data?.blog;
+
+  return (
+    <div className="flex flex-col lg:flex-row justify-between gap-10 lg:gap-20">
+      {post ? (
+        <div className="border rounded w-full lg:w-[70%] p-5">
+          <h1 className="text-2xl font-bold mb-5">{post.title}</h1>
+
+          <div className="flex items-center gap-3">
+            <Avatar>
+              <AvatarImage
+                src={post.author?.avatar || usericon}
+                referrerPolicy="no-referrer"
+              />
+            </Avatar>
+            <span>{post.author?.name}</span>
           </div>
-        </>
+
+          {post.featuredImage && (
+            <div className="my-5">
+              <img src={post.featuredImage} className="rounded w-full" />
+            </div>
+          )}
+
+          <div
+            dangerouslySetInnerHTML={{
+              __html: decode(post.blogContent || ""),
+            }}
+          />
+
+          <div className="border-t mt-5 pt-5">
+            <Comment props={{ blogId: post._id }} />
+          </div>
+        </div>
+      ) : (
+        <div className="w-full lg:w-[70%]">Blog not found.</div>
       )}
-      <div className="border rounded w-[30%]"></div>
+
+      <div className="border rounded w-full lg:w-[30%]"></div>
     </div>
   );
 };
