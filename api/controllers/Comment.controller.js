@@ -25,13 +25,26 @@ export const getComments = async (req, res, next) => {
   try {
     const { blogId } = req.params;
     const comments = await Comment.find({ blogId })
-      .populate('author', 'name avatar')
+      .populate("author", "name avatar")
       .sort({ createdAt: -1 })
       .lean()
       .exec();
 
     res.status(200).json({
       comments,
+    });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
+
+export const commentCount = async (req, res, next) => {
+  try {
+    const { blogId } = req.params;
+    const commentCount = await Comment.countDocuments({ blogId });
+
+    res.status(200).json({
+      commentCount,
     });
   } catch (error) {
     next(handleError(500, error.message));

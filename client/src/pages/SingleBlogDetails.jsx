@@ -7,6 +7,8 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import usericon from "@/assets/images/user.png";
 import { getEnv } from "@/helpers/getEnv";
 import { useFetch } from "@/hooks/useFetch";
+import moment from "moment";
+import CommentCount from "@/components/CommentCount";
 
 const SingleBlogDetails = () => {
   const { blog } = useParams();
@@ -14,7 +16,7 @@ const SingleBlogDetails = () => {
   const { data, loading } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/blog/get-blog/${blog}`,
     { method: "get", credentials: "include" },
-    [blog], // refetch when the slug changes
+    [blog],
   );
 
   if (loading) return <Loading />;
@@ -27,14 +29,20 @@ const SingleBlogDetails = () => {
         <div className="border rounded w-full lg:w-[70%] p-5">
           <h1 className="text-2xl font-bold mb-5">{post.title}</h1>
 
-          <div className="flex items-center gap-3">
-            <Avatar>
-              <AvatarImage
-                src={post.author?.avatar || usericon}
-                referrerPolicy="no-referrer"
-              />
-            </Avatar>
-            <span>{post.author?.name}</span>
+          <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-5">
+              <Avatar>
+                <AvatarImage src={data.blog.author.avatar} />
+              </Avatar>
+              <div>
+                <p className="font-bold">{data.blog.author.name}</p>
+                <p>Date: {moment(data.blog.createdAt).format("DD-MM-YYYY")}</p>
+              </div>
+            </div>
+            <div className="flex justify-between items-center gap-5">
+              {/* <LikeCount props={{ blogId: data.blog._id }} /> */}
+              <CommentCount props={{ blogId: data.blog._id }} />
+            </div>
           </div>
 
           {post.featuredImage && (
