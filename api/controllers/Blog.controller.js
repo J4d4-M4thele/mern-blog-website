@@ -3,6 +3,7 @@ import { handleError } from "../helpers/handleError.js"
 import Blog from "../models/blog.model.js"
 import { encode } from 'entities'
 import Category from "../models/category.model.js"
+
 export const addBlog = async (req, res, next) => {
     try {
         const data = JSON.parse(req.body.data)

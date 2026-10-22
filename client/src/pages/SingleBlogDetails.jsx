@@ -40,7 +40,7 @@ const SingleBlogDetails = () => {
                 __html: decode(data.blog.blogContent || "")
               }}
             ></div>
-            <div className="border-t mt-5 pt-5 text-2xl font-bold">
+            <div className="border-t mt-5 pt-5 text-2xl">
               <Comment />
             </div>
           </div>
