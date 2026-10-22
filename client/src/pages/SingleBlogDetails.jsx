@@ -5,6 +5,7 @@ import { useFetch } from "@/hooks/useFetch";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { decode } from "entities";
+import Comment from "@/components/Comment";
 
 const SingleBlogDetails = () => {
   const { blog } = useParams();
@@ -39,6 +40,9 @@ const SingleBlogDetails = () => {
                 __html: decode(data.blog.blogContent || "")
               }}
             ></div>
+            <div className="border-t mt-5 pt-5 text-2xl font-bold">
+              <Comment />
+            </div>
           </div>
         </>
       )}
