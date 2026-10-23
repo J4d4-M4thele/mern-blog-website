@@ -51,12 +51,13 @@ const CommentList = ({ props }) => {
           <div key={comment._id} className="flex gap-2 mb-3">
             <Avatar>
               <AvatarImage
-                src={comment.author?.avatar || usericon}
+                src={comment.user?.avatar || usericon}
                 referrerPolicy="no-referrer"
               />
             </Avatar>
+
             <div>
-              <p className="font-bold">{comment.author?.name}</p>
+              <p className="font-bold">{comment.user?.name}</p>
               <p>{moment(comment.createdAt).format("DD-MM-YYYY")}</p>
               <div className="pt-3">{comment.comment}</div>
             </div>
