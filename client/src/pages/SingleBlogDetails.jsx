@@ -9,6 +9,7 @@ import { getEnv } from "@/helpers/getEnv";
 import { useFetch } from "@/hooks/useFetch";
 import moment from "moment";
 import CommentCount from "@/components/CommentCount";
+import LikeCount from "@/components/LikeCount";
 
 const SingleBlogDetails = () => {
   const { blog } = useParams();
@@ -40,7 +41,7 @@ const SingleBlogDetails = () => {
               </div>
             </div>
             <div className="flex justify-between items-center gap-5">
-              {/* <LikeCount props={{ blogId: data.blog._id }} /> */}
+              <LikeCount props={{ blogId: data.blog._id }} />
               <CommentCount props={{ blogId: data.blog._id }} />
             </div>
           </div>
