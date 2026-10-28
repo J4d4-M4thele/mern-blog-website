@@ -40,7 +40,7 @@ const Comment = ({ props }) => {
       const newValues = {
         ...values,
         blogId: props.blogId,
-        author: user.user._id,
+        user: user.user._id,
       };
 
       const response = await fetch(

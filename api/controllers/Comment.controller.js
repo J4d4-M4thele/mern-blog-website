@@ -3,11 +3,11 @@ import Comment from "../models/comment.model.js";
 
 export const addComment = async (req, res, next) => {
   try {
-    const { user, blogId, comment } = req.body;
+    const { blogId, comment } = req.body;
     const newComment = new Comment({
-      user: user,
-      blogId: blogId,
-      comment: comment,
+      user: req.user._id,
+      blogId,
+      comment,
     });
     await newComment.save();
 
