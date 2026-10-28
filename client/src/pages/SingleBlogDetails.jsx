@@ -9,10 +9,11 @@ import { useFetch } from "@/hooks/useFetch";
 import moment from "moment";
 import CommentCount from "@/components/CommentCount";
 import LikeCount from "@/components/LikeCount";
+import RelatedBlog from "@/components/RelatedBlog";
 
 const SingleBlogDetails = () => {
-  const { blog } = useParams();
-
+  const { blog, category } = useParams();
+  
   const { data, loading } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/blog/get-blog/${blog}`,
     { method: "get", credentials: "include" },
@@ -65,7 +66,9 @@ const SingleBlogDetails = () => {
         <div className="w-full lg:w-[70%]">Blog not found.</div>
       )}
 
-      <div className="border rounded w-full lg:w-[30%]"></div>
+      <div className="border rounded w-full lg:w-[30%]">
+        <RelatedBlog props={{ category: category }} />
+      </div>
     </div>
   );
 };

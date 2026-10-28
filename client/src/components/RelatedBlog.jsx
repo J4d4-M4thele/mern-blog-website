@@ -11,8 +11,6 @@ const RelatedBlog = ({ props }) => {
     },
   );
 
-  console.log(data);
-
   return (
     <div>
       <h2 className="text-2xl font-bold">Related Blogs</h2>

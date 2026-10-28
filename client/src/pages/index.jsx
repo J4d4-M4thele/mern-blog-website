@@ -14,8 +14,6 @@ const index = () => {
     credentials: "include",
   });
 
-  console.log("blogData:", blogData);
-
   const blogs = Array.isArray(blogData)
     ? blogData
     : (blogData?.blog ?? blogData?.blogs ?? []);

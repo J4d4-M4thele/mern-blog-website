@@ -57,11 +57,8 @@ const EditCategory = () => {
       
     }, [categoryName]);
 
-    console.log(categoryData);
-
     useEffect(() => {
       if(categoryData) {
-        console.log("Category data:", categoryData.category);
         form.setValue("name", categoryData.category.name);
         form.setValue("slug", categoryData.category.slug);
       }
