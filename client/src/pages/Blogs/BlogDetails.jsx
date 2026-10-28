@@ -46,7 +46,9 @@ const BlogDetails = () => {
     }
   }
 
-  const blogs = blogData?.blogs ?? [];
+  const blogs = blogData?.blog ?? [];
+
+  console.log(blogData);
 
   if (loading)
     return (
