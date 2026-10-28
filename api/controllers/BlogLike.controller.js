@@ -16,10 +16,10 @@ export const doLike = async (req, res, next) => {
       await BlogLike.findByIdAndDelete(like._id);
     }
 
-    const likecount = await BlogLike.countDocuments({ blogId });
+    const likeCount = await BlogLike.countDocuments({ blogId });
 
     res.status(200).json({
-      likecount,
+      likeCount,
     });
   } catch (error) {
     next(handleError(500, error.message));
@@ -37,7 +37,7 @@ export const likeCount = async (req, res, next) => {
         blogId,
         user: userId,
       });
-      if (getUserLike) {
+      if (getUserLike > 0) {
         isUserLiked = true;
       }
     }
