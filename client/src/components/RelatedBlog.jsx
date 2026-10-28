@@ -1,24 +1,45 @@
 import React from "react";
 import { useFetch } from "@/hooks/useFetch";
 import { getEnv } from "@/helpers/getEnv";
+import { Link } from "react-router-dom";
+import { RouteBlog } from "@/helpers/RouteName";
 
 const RelatedBlog = ({ props }) => {
   const { data, loading } = useFetch(
-    `${getEnv("VITE_API_BASE_URL")}/blog/get-related-blog/${props.category}`,
+    `${getEnv("VITE_API_BASE_URL")}/blog/get-related-blog/${props.category}/${props.currentBlog}`,
     {
       method: "get",
       credentials: "include",
     },
   );
 
+  if (loading) return <div>Loading...</div>;
   return (
     <div>
-      <h2 className="text-2xl font-bold">Related Blogs</h2>
+      <h2 className="text-2xl font-bold mb-5">Related Blogs</h2>
       <div>
-        <div className="flex items-center gap-2">
-          <img />
-          <h4></h4>
-        </div>
+        {data && data.relatedBlog.length > 0 ? (
+          data.relatedBlog.map((blog) => {
+            return (
+              <Link
+                key={blog._id}
+                to={RouteBlog(props.category, blog.slug)}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <img
+                    className="w-[100px] h-[70px] object-cover rounded-md"
+                    src={blog.featuredImage}
+                  />
+                  <h4 className="line-clamp-2 text-lg font-semibold">
+                    {blog.title}
+                  </h4>
+                </div>
+              </Link>
+            );
+          })
+        ) : (
+          <div>No Related Blogs</div>
+        )}
       </div>
     </div>
   );

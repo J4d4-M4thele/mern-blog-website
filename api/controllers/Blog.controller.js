@@ -144,7 +144,7 @@ export const getBlog = async (req, res, next) => {
 export const getRelatedBlog = async (req, res, next) => {
     try {
         const { category, blog } = req.params
-
+        
         const categoryData = await Category.findOne({ slug: category })
         if (!categoryData) {
             return next(404, 'Category data not found.')

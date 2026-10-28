@@ -13,6 +13,6 @@ BlogRoute.delete("/delete/:blogid", authenticate, deleteBlog);
 
 BlogRoute.get('/blogs', getAllBlogs)
 BlogRoute.get('/get-blog/:slug', getBlog)
-BlogRoute.get('/get-related-blog/:category', getRelatedBlog)
+BlogRoute.get('/get-related-blog/:category/:blog', getRelatedBlog)
 
 export default BlogRoute;

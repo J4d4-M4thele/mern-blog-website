@@ -17,7 +17,7 @@ const SingleBlogDetails = () => {
   const { data, loading } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/blog/get-blog/${blog}`,
     { method: "get", credentials: "include" },
-    [blog],
+    [blog, category],
   );
 
   if (loading) return <Loading />;
@@ -66,8 +66,8 @@ const SingleBlogDetails = () => {
         <div className="w-full lg:w-[70%]">Blog not found.</div>
       )}
 
-      <div className="border rounded w-full lg:w-[30%]">
-        <RelatedBlog props={{ category: category }} />
+      <div className="border rounded w-full lg:w-[30%] p-5">
+        <RelatedBlog props={{ category: category, currentBlog: blog }} />
       </div>
     </div>
   );
