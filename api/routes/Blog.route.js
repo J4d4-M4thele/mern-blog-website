@@ -1,5 +1,5 @@
 import express from "express";
-import { addBlog, editBlog, updateBlog, deleteBlog, showAllBlog, getAllBlogs, getBlog, getRelatedBlog } from "../controllers/Blog.controller.js";
+import { addBlog, editBlog, updateBlog, deleteBlog, showAllBlog, getAllBlogs, getBlog, getRelatedBlog, getBlogByCategory } from "../controllers/Blog.controller.js";
 import upload from "../middleware/multer.js";
 import { authenticate } from "../middleware/authenticate.js";
 
@@ -14,5 +14,6 @@ BlogRoute.delete("/delete/:blogid", authenticate, deleteBlog);
 BlogRoute.get('/blogs', getAllBlogs)
 BlogRoute.get('/get-blog/:slug', getBlog)
 BlogRoute.get('/get-related-blog/:category/:blog', getRelatedBlog)
+BlogRoute.get('/get-blog-by-category/:category', getBlogByCategory)
 
 export default BlogRoute;

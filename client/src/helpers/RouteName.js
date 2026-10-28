@@ -31,3 +31,11 @@ export const RouteBlog = (category, blog) => {
     return `/blog/${category}/${blog}`;
   }
 };
+
+export const RouteBlogByCategory = (category) => {
+  if (!category) {
+    return "/blog/:category";
+  } else {
+    return `/blog/${category}`;
+  }
+};
