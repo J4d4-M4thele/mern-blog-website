@@ -141,23 +141,23 @@ export const getBlog = async (req, res, next) => {
     }
 }
 
-// export const getRelatedBlog = async (req, res, next) => {
-//     try {
-//         const { category, blog } = req.params
+export const getRelatedBlog = async (req, res, next) => {
+    try {
+        const { category, blog } = req.params
 
-//         const categoryData = await Category.findOne({ slug: category })
-//         if (!categoryData) {
-//             return next(404, 'Category data not found.')
-//         }
-//         const categoryId = categoryData._id
-//         const relatedBlog = await Blog.find({ category: categoryId, slug: { $ne: blog } }).lean().exec()
-//         res.status(200).json({
-//             relatedBlog
-//         })
-//     } catch (error) {
-//         next(handleError(500, error.message))
-//     }
-// }
+        const categoryData = await Category.findOne({ slug: category })
+        if (!categoryData) {
+            return next(404, 'Category data not found.')
+        }
+        const categoryId = categoryData._id
+        const relatedBlog = await Blog.find({ category: categoryId, slug: { $ne: blog } }).lean().exec()
+        res.status(200).json({
+            relatedBlog
+        })
+    } catch (error) {
+        next(handleError(500, error.message))
+    }
+}
 
 // export const getBlogByCategory = async (req, res, next) => {
 //     try {
