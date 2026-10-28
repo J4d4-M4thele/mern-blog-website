@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getEnv } from "@/helpers/getEnv";
 import { useFetch } from "@/hooks/useFetch";
 import { FaRegHeart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { showToast } from "@/helpers/showToast";
 
@@ -15,7 +16,7 @@ const LikeCount = ({ props }) => {
     loading,
     error,
   } = useFetch(
-    `${getEnv("VITE_API_BASE_URL")}/blog-like/get-count/${props.blogId}`,
+    `${getEnv("VITE_API_BASE_URL")}/blog-like/get-count/${props.blogId}/${user && user.isLoggedIn ? user.user._id : ''}`,
     {
       method: "get",
       credentials: "include",
@@ -63,7 +64,7 @@ const LikeCount = ({ props }) => {
       type="button"
       className="flex justify-between items-center gap-1"
     >
-      {!hasLiked ? <FaRegHeart /> : <FaRegHeart fill="red" />}
+      {!hasLiked ? <FaRegHeart /> : <FaHeart fill="red" />}
       {likeCount}
     </button>
   );
