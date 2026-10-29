@@ -17,7 +17,7 @@ import { GrBlog } from "react-icons/gr";
 import { FaRegComments } from "react-icons/fa6";
 import { FiUsers } from "react-icons/fi";
 import { GoDot } from "react-icons/go";
-import { RouteCategoryDetails, RouteBlogDetails } from "@/helpers/RouteName";
+import { RouteCategoryDetails, RouteBlogDetails, RouteBlogByCategory } from "@/helpers/RouteName";
 import { getEnv } from "@/helpers/getEnv";
 import { useFetch } from "@/hooks/useFetch";
 
@@ -86,7 +86,7 @@ const AppSidebar = () => {
               <SidebarMenuItem key={category._id}>
                 <SidebarMenuButton>
                   <GoDot />
-                  <Link to="">{category.name}</Link>
+                  <Link to={RouteBlogByCategory(category.slug)}>{category.name}</Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}

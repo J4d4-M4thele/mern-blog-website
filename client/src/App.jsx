@@ -12,6 +12,7 @@ import {
   RouteAddBlog,
   RouteEditBlog,
   RouteBlog,
+  RouteBlogByCategory,
 } from "./helpers/RouteName";
 import Layout from "./Layout/Layout";
 import Index from "./pages/index";
@@ -25,6 +26,7 @@ import BlogDetails from "./pages/Blogs/BlogDetails";
 import AddBlog from "./pages/Blogs/AddBlog";
 import EditBlog from "./pages/Blogs/EditBlog";
 import SingleBlogDetails from "./pages/SingleBlogDetails";
+import BlogByCategory from "./pages/Blogs/BlogByCategory";
 
 const App = () => {
   return (
@@ -44,6 +46,7 @@ const App = () => {
           <Route path={RouteAddBlog} element={<AddBlog />} />
           <Route path={RouteEditBlog()} element={<EditBlog />} />
           <Route path={RouteBlog()} element={<SingleBlogDetails />} />
+          <Route path={RouteBlogByCategory()} element={<BlogByCategory />} />
         </Route>
 
         <Route path={RouteSignIn} element={<SignIn />} />
