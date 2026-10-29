@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const SearchBox = ({ className, ...props }) => {
   const navigate = useNavigate();
+  const [refreshData, setRefreshData] = useState(false);
   const [query, setQuery] = useState();
 
   const getInput = (e) => {
@@ -14,6 +15,7 @@ const SearchBox = ({ className, ...props }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setRefreshData(!refreshData)
     navigate(RouteSearch(query));
   };
   return (

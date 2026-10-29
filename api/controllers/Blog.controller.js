@@ -189,17 +189,24 @@ export const getBlogByCategory = async (req, res, next) => {
 };
 
 export const search = async (req, res, next) => {
-    try {
-        const { q } = req.query
-        
-        const blog = await Blog.find({ title: { $regex: q, $options: 'i' } }).populate('author', 'name avatar role').populate('category', 'name slug').lean().exec()
-        res.status(200).json({
-            blog,
-        })
-    } catch (error) {
-        next(handleError(500, error.message))
-    }
-}
+  try {
+    const q = (req.query.q ?? "").trim();
+    if (!q) return res.status(200).json({ blog: [] });
+
+    const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    const blog = await Blog.find({ title: { $regex: escaped, $options: "i" } })
+      .populate("author", "name avatar role")
+      .populate("category", "name slug")
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
+
+    res.status(200).json({ blog });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};
 
 export const getAllBlogs = async (req, res, next) => {
   try {

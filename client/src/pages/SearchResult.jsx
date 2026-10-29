@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import { useSearchParams } from "react-router-dom";
 import { getEnv } from "@/helpers/getEnv";
 import { useFetch } from "@/hooks/useFetch";
 import BlogCard from "@/components/BlogCard";
+import Loading from "@/components/Loading";
 
 const SearchResult = () => {
   const [searchParams] = useSearchParams();
@@ -12,16 +13,19 @@ const SearchResult = () => {
     data: blogData,
     loading,
     error,
-  } = useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/search?q=${q}`, {
-    method: "get",
-    credentials: "include",
-  });
-  console.log(blogData);
+  } = useFetch(
+    `${getEnv("VITE_API_BASE_URL")}/blog/search?q=${encodeURIComponent(q ?? "")}`,
+    {
+      method: "get",
+      credentials: "include",
+    },
+  );
 
   const blogs = Array.isArray(blogData)
     ? blogData
     : (blogData?.blog ?? blogData?.blogs ?? []);
 
+  if (loading) return <Loading />;
   return (
     <>
       <div className="flex items-center gap-3 text-2xl font-bold text-violet-500 border-b pb-3 mb-5">

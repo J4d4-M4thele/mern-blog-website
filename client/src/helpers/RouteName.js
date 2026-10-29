@@ -42,7 +42,7 @@ export const RouteBlogByCategory = (category) => {
 
 export const RouteSearch = (q) => {
   if(q) {
-    return `/search?q=${q}`;
+    return `/search?q=${encodeURIComponent(q)}`;
   }else {
     return '/search'
   }
