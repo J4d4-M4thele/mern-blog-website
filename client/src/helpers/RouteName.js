@@ -39,3 +39,7 @@ export const RouteBlogByCategory = (category) => {
     return `/blog/${category}`;
   }
 };
+
+export const RouteSearch = (q) => {
+  return `/blog/search=${q}`;
+};

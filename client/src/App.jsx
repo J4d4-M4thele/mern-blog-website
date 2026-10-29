@@ -13,6 +13,7 @@ import {
   RouteEditBlog,
   RouteBlog,
   RouteBlogByCategory,
+  RouteSearch,
 } from "./helpers/RouteName";
 import Layout from "./Layout/Layout";
 import Index from "./pages/index";
@@ -27,6 +28,7 @@ import AddBlog from "./pages/Blogs/AddBlog";
 import EditBlog from "./pages/Blogs/EditBlog";
 import SingleBlogDetails from "./pages/SingleBlogDetails";
 import BlogByCategory from "./pages/Blogs/BlogByCategory";
+import SearchResult from "./pages/SearchResult";
 
 const App = () => {
   return (
@@ -47,6 +49,7 @@ const App = () => {
           <Route path={RouteEditBlog()} element={<EditBlog />} />
           <Route path={RouteBlog()} element={<SingleBlogDetails />} />
           <Route path={RouteBlogByCategory()} element={<BlogByCategory />} />
+          <Route path={RouteSearch()} element={<SearchResult />} />
         </Route>
 
         <Route path={RouteSignIn} element={<SignIn />} />
