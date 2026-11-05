@@ -70,3 +70,16 @@ export const getAllComments = async (req, res, next) => {
   }
 };
 
+export const deleteComment = async (req, res, next) => {
+  try {
+    const {commentId} = req.params;
+    await Comment.findByIdAndDelete(commentId);
+    
+    res.status(200).json({
+      success: true,
+      message: "Comment deleted successfully"
+    });
+  } catch (error) {
+    next(handleError(500, error.message));
+  }
+};

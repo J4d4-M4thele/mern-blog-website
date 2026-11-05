@@ -36,8 +36,8 @@ const BlogDetails = () => {
     [refreshData],
   );
 
-  const handleDelete = (id) => {
-    const response = deleteData(`${getEnv("VITE_API_BASE_URL")}/blog/delete/${id}`);
+  const handleDelete = async (id) => {
+    const response = await deleteData(`${getEnv("VITE_API_BASE_URL")}/blog/delete/${id}`);
     if (response) {
       setRefreshData(!refreshData);
       showToast("success", "Blog deleted successfully");
