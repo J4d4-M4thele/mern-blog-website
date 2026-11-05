@@ -101,7 +101,7 @@ export const deleteBlog = async (req, res, next) => {
     await Blog.findByIdAndDelete(blogid);
     res.status(200).json({
       success: true,
-      message: "Blog Deleted successfully.",
+      message: "Blog deleted successfully.",
     });
   } catch (error) {
     next(handleError(500, error.message));

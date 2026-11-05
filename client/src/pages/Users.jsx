@@ -38,7 +38,7 @@ const Users = () => {
     const response = await deleteData(`${getEnv("VITE_API_BASE_URL")}/user/delete/${id}`);
     if (response) {
       setRefreshData(!refreshData);
-      showToast("success", "User deleted successfully");
+      showToast("success", "User deleted");
     }else {
       showToast("error", "Failed to delete user");
     }

@@ -37,7 +37,7 @@ const Comments = () => {
     const response = await deleteData(`${getEnv("VITE_API_BASE_URL")}/comment/delete/${id}`);
     if (response) {
       setRefreshData(!refreshData);
-      showToast("success", "Comment deleted successfully");
+      showToast("success", "Comment deleted");
     }else {
       showToast("error", "Failed to delete comment");
     }

@@ -39,7 +39,7 @@ const CategoryDetails = () => {
     const response = await deleteData(`${getEnv("VITE_API_BASE_URL")}/category/delete/${id}`);
     if (response) {
       setRefreshData(!refreshData);
-      showToast("success", "Category deleted successfully");
+      showToast("success", "Category deleted");
     }else {
       showToast("error", "Failed to delete category");
     }
