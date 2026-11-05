@@ -112,7 +112,7 @@ const BlogDetails = () => {
               ) : (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center">
-                    No data found
+                    No blogs found
                   </TableCell>
                 </TableRow>
               )}

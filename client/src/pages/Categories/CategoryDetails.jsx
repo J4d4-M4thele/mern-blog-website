@@ -105,7 +105,7 @@ const CategoryDetails = () => {
               ) : (
                 <TableRow>
                   <TableCell colSpan={3} className="text-center">
-                    No data found
+                    No categories found
                   </TableCell>
                 </TableRow>
               )}

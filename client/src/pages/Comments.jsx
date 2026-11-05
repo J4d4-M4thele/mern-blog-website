@@ -14,7 +14,6 @@ import { Link } from "react-router-dom";
 import { useFetch } from "@/hooks/useFetch";
 import { getEnv } from "@/helpers/getEnv";
 import Loading from "@/components/Loading";
-import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { deleteData } from "@/helpers/handleDelete";
 import { showToast } from "@/helpers/showToast";
