@@ -17,11 +17,20 @@ import { GrBlog } from "react-icons/gr";
 import { FaRegComments } from "react-icons/fa6";
 import { FiUsers } from "react-icons/fi";
 import { GoDot } from "react-icons/go";
-import { RouteCategoryDetails, RouteBlogDetails, RouteBlogByCategory, RouteCommentDetails, RouteUsers } from "@/helpers/RouteName";
+import {
+  RouteIndex,
+  RouteCategoryDetails,
+  RouteBlogDetails,
+  RouteBlogByCategory,
+  RouteCommentDetails,
+  RouteUsers,
+} from "@/helpers/RouteName";
 import { getEnv } from "@/helpers/getEnv";
 import { useFetch } from "@/hooks/useFetch";
+import { useSelector } from "react-redux";
 
 const AppSidebar = () => {
+  const user = useSelector((state) => state.user);
   const { data: categoryData } = useFetch(
     `${getEnv("VITE_API_BASE_URL")}/category/all-categories`,
     {
@@ -46,33 +55,47 @@ const AppSidebar = () => {
           <SidebarMenuItem>
             <SidebarMenuButton>
               <IoHomeOutline />
-              <Link to="">Home</Link>
+              <Link to={RouteIndex}>Home</Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <BiCategoryAlt />
-              <Link to={RouteCategoryDetails}>Categories</Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <GrBlog />
-              <Link to={RouteBlogDetails}>Blogs</Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <FaRegComments />
-              <Link to={RouteCommentDetails}>Comments</Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <FiUsers />
-              <Link to={RouteUsers}>Users</Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+
+          {user && user.isLoggedIn ? (
+            <>
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <GrBlog />
+                  <Link to={RouteBlogDetails}>Blogs</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <FaRegComments />
+                  <Link to={RouteCommentDetails}>Comments</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </>
+          ) : (
+            <></>
+          )}
+          {user && user.isLoggedIn && user.user?.role === "admin" ? (
+            <>
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <BiCategoryAlt />
+                  <Link to={RouteCategoryDetails}>Categories</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton>
+                  <FiUsers />
+                  <Link to={RouteUsers}>Users</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </>
+          ) : (
+            <></>
+          )}
         </SidebarMenu>
         <SidebarGroup />
 
@@ -83,13 +106,15 @@ const AppSidebar = () => {
         </SidebarGroupLabel>
         <SidebarMenu>
           {categories.map((category) => (
-              <SidebarMenuItem key={category._id}>
-                <SidebarMenuButton>
-                  <GoDot />
-                  <Link to={RouteBlogByCategory(category.slug)}>{category.name}</Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
+            <SidebarMenuItem key={category._id}>
+              <SidebarMenuButton>
+                <GoDot />
+                <Link to={RouteBlogByCategory(category.slug)}>
+                  {category.name}
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
         </SidebarMenu>
         <SidebarGroup />
       </SidebarContent>
