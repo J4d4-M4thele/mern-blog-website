@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { showToast } from "@/helpers/showToast";
 import { getEnv } from "@/helpers/getEnv";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { useSelector } from "react-redux";
 import { RouteSignIn } from "@/helpers/RouteName";
@@ -93,7 +93,9 @@ const Comment = ({ props }) => {
           </form>
         </Form>
       ) : (
-        <Button render={<Link to={RouteSignIn} />}>Sign In</Button>
+        <Button asChild>
+          <Link to={RouteSignIn}>Sign In </Link>
+        </Button>
       )}
 
       <div className="mt-5">

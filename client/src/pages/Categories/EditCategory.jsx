@@ -45,8 +45,6 @@ const EditCategory = () => {
       },
     });
 
-    // const categories = categoryData?.categories ?? [];
-
     const categoryName = form.watch("name");
 
     useEffect(() => {
@@ -70,6 +68,7 @@ const EditCategory = () => {
           `${getEnv("VITE_API_BASE_URL")}/category/update/${category_id}`,
           {
             method: "put",
+            credentials: "include",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify(values),
           },

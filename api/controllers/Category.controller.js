@@ -54,7 +54,11 @@ export const updateCategory = async (req, res, next) => {
       { name, slug },
       { new: true },
     );
-
+    
+    if(!category) {
+      return next(handleError(404, "Category not found"));
+    }
+    console.log("update:", req.params, req.body);
     res.status(200).json({
       success: true,
       message: "Category updated successfully",
