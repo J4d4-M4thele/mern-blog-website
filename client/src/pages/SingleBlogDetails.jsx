@@ -25,7 +25,7 @@ const SingleBlogDetails = () => {
   const post = data?.blog;
 
   return (
-    <div className="flex flex-col lg:flex-row justify-between gap-10 lg:gap-20">
+    <div className="flex flex-col lg:flex-row justify-between gap-10 lg:gap-10">
       {post ? (
         <div className="border rounded w-full lg:w-[70%] p-5">
           <h1 className="text-2xl font-bold mb-5">{post.title}</h1>

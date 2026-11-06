@@ -15,7 +15,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import usericon from "@/assets/images/user.png";
 
 import { FaRegUser } from "react-icons/fa";
@@ -23,12 +24,12 @@ import { FaPlus } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
 
 import { removeUser } from "@/redux/user/user.slice";
-import { RouteIndex } from "@/helpers/RouteName";
+import { RouteIndex, RouteAddBlog } from "@/helpers/RouteName";
 import { showToast } from "@/helpers/showToast";
 import { getEnv } from "@/helpers/getEnv";
+import { IoMdSearch } from "react-icons/io";
 
 const Topbar = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
@@ -57,12 +58,10 @@ const Topbar = () => {
   };
 
   return (
-    <div
-      className="flex justify-between items-center h-16 fixed w-full 
-    z-20 bg-white px-5 border-b"
-    >
-      <div>
-        <img src={logo} />
+    <div className="flex justify-between items-center h-16 sticky top-0 z-20 bg-white px-5 border-b">
+      <div className="flex items-center gap-3">
+        <SidebarTrigger />
+        {/* <img src={logo} width={120} /> */}
       </div>
 
       <div className="w-[500px]">
@@ -80,8 +79,10 @@ const Topbar = () => {
           <DropdownMenu>
             <DropdownMenuTrigger render={<Button variant="outline" />}>
               <Avatar>
-                <AvatarImage src={user.user.avatar || usericon} referrerPolicy="no-referrer" />
-                <AvatarFallback>JM</AvatarFallback>
+                <AvatarImage
+                  src={user.user.avatar || usericon}
+                  referrerPolicy="no-referrer"
+                />
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -98,15 +99,18 @@ const Topbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link to="">
+                  <Link to={RouteAddBlog}>
                     <FaPlus />
                     Create Blog
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500">
-                    <IoLogOutOutline />
-                    Sign Out
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="cursor-pointer text-red-500"
+                >
+                  <IoLogOutOutline />
+                  Sign Out
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
