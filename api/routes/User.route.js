@@ -3,7 +3,9 @@ import { getUser, updateUser, getAllUsers, deleteUser } from "../controllers/Use
 import upload from "../middleware/multer.js";
 import { authenticate } from "../middleware/authenticate.js";
 
-const UserRoute = express.Router(authenticate);
+const UserRoute = express.Router();
+
+UserRoute.use(authenticate);
 
 UserRoute.get("/get-user/:userid", getUser);
 UserRoute.put("/update-user/:userid", upload.single("file"), updateUser);
