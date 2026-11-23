@@ -18,7 +18,7 @@ const SearchResult = () => {
     {
       method: "get",
       credentials: "include",
-    },
+    }, [q]
   );
 
   const blogs = Array.isArray(blogData)

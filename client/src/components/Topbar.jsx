@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "@/assets/images/logo-white.png";
 import { Button } from "./ui/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -30,6 +30,7 @@ import { getEnv } from "@/helpers/getEnv";
 import { IoMdSearch } from "react-icons/io";
 
 const Topbar = () => {
+  const [showSearch, setShowSearch] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
@@ -57,17 +58,37 @@ const Topbar = () => {
     }
   };
 
+  const toggleSearch = () => {
+    setShowSearch(!showSearch);
+  };
+
   return (
     <div className="flex justify-between items-center h-16 sticky top-0 z-20 bg-white px-5 border-b">
       <div className="flex items-center gap-3">
         <SidebarTrigger />
-        {/* <img src={logo} width={120} /> */}
+        <Link to={RouteIndex}>
+          <img src={logo} className="md:auto w-24" />
+        </Link>
       </div>
 
       <div className="w-[500px]">
-        <SearchBox />
+        <div
+          className={`md:relative md:block absolute bg-white 
+      left-0 w-full md:top-0 top-16 md-p-0 p-5 ${showSearch ? "block" : "hidden"}`}
+        >
+          <SearchBox />
+        </div>
       </div>
-      <div>
+
+      <div className="flex items-center gap-5">
+        <button
+          onClick={toggleSearch}
+          type="button"
+          className="md:hidden block"
+        >
+          <IoMdSearch size={25} />
+        </button>
+
         {!user.isLoggedIn ? (
           <Button asChild className="rounded-full">
             <Link to={RouteSignIn}>
