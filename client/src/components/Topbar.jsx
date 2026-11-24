@@ -28,6 +28,7 @@ import { RouteIndex, RouteAddBlog } from "@/helpers/RouteName";
 import { showToast } from "@/helpers/showToast";
 import { getEnv } from "@/helpers/getEnv";
 import { IoMdSearch } from "react-icons/io";
+import ModeToggle from "./ModeToggle";
 
 const Topbar = () => {
   const [showSearch, setShowSearch] = useState(false);
@@ -88,6 +89,10 @@ const Topbar = () => {
         >
           <IoMdSearch size={25} />
         </button>
+
+        <div className="flex items-center gap-3">
+          <ModeToggle />
+        </div>
 
         {!user.isLoggedIn ? (
           <Button asChild className="rounded-full">

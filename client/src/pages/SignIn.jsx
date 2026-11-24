@@ -82,7 +82,7 @@ const SignIn = () => {
         <div>
           <GoogleLogin />
           <div className="border-1 my-5 flex justify-center items-center">
-            <span className="absolute bg-white text-sm">Or</span>
+            <span className="absolute bg-background text-foreground text-sm">Or</span>
           </div>
         </div>
 
