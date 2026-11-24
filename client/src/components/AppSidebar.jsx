@@ -10,7 +10,8 @@ import {
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
-import logo from "@/assets/images/logo-white.png";
+import logoLight from "@/assets/images/logo-white.png";
+import logoDark from "@/assets/images/logo-dark.png";
 import { IoHomeOutline } from "react-icons/io5";
 import { BiCategoryAlt } from "react-icons/bi";
 import { GrBlog } from "react-icons/gr";
@@ -46,7 +47,13 @@ const AppSidebar = () => {
   return (
     <Sidebar>
       <SidebarHeader className="bg-background text-foreground">
-        <img src={logo} alt="Logo" width={120} />
+        <img src={logoLight} alt="Logo" width={120} className="dark:hidden" />
+        <img
+          src={logoDark}
+          alt="Logo"
+          width={120}
+          className="hidden dark:block"
+        />
       </SidebarHeader>
 
       <SidebarContent className="bg-background text-foreground">

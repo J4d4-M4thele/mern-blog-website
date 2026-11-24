@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import logo from "@/assets/images/logo-white.png";
+import logoLight from "@/assets/images/logo-white.png";
+import logoDark from "@/assets/images/logo-dark.png";
 import { Button } from "./ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosLogIn } from "react-icons/io";
@@ -68,7 +69,13 @@ const Topbar = () => {
       <div className="flex items-center gap-3">
         <SidebarTrigger />
         <Link to={RouteIndex}>
-          <img src={logo} className="md:auto w-24" />
+          <img src={logoLight} alt="Logo" width={120} className="dark:hidden" />
+          <img
+            src={logoDark}
+            alt="Logo"
+            width={120}
+            className="hidden dark:block"
+          />
         </Link>
       </div>
 

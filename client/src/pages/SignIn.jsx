@@ -20,14 +20,14 @@ import { getEnv } from "@/helpers/getEnv";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/user/user.slice";
 import GoogleLogin from "@/components/GoogleLogin";
-import logo from "@/assets/images/logo-white.png";
+import logoLight from "@/assets/images/logo-white.png";
+import logoDark from "@/assets/images/logo-dark.png";
 
 const SignIn = () => {
-
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-  
+
   const formSchema = z.object({
     email: z.string().email(),
     password: z.string().min(3, "Password is required."),
@@ -68,11 +68,21 @@ const SignIn = () => {
   return (
     <div className="flex justify-center items-center h-screen w-screen">
       <Card className="w-[400px] p-5">
-        
         <div className="flex justify-center items-center mb-2">
           <Link to={RouteIndex}>
-        <img src={logo} />
-        </Link>
+            <img
+              src={logoLight}
+              alt="Logo"
+              width={120}
+              className="dark:hidden"
+            />
+            <img
+              src={logoDark}
+              alt="Logo"
+              width={120}
+              className="hidden dark:block"
+            />
+          </Link>
         </div>
 
         <h1 className="text-2xl font-bold text-center mb-5">
@@ -82,7 +92,9 @@ const SignIn = () => {
         <div>
           <GoogleLogin />
           <div className="border-1 my-5 flex justify-center items-center">
-            <span className="absolute bg-background text-foreground text-sm">Or</span>
+            <span className="absolute bg-background text-foreground text-sm">
+              Or
+            </span>
           </div>
         </div>
 
