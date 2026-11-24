@@ -63,7 +63,7 @@ const Topbar = () => {
   };
 
   return (
-    <div className="flex justify-between items-center h-16 sticky top-0 z-20 bg-white px-5 border-b">
+    <div className="flex justify-between items-center h-16 sticky top-0 z-20 bg-background px-5 border-b">
       <div className="flex items-center gap-3">
         <SidebarTrigger />
         <Link to={RouteIndex}>
@@ -73,7 +73,7 @@ const Topbar = () => {
 
       <div className="w-[500px]">
         <div
-          className={`md:relative md:block absolute bg-white 
+          className={`md:relative md:block absolute bg-background 
       left-0 w-full md:top-0 top-16 md-p-0 p-5 ${showSearch ? "block" : "hidden"}`}
         >
           <SearchBox />

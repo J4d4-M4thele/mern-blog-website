@@ -45,11 +45,11 @@ const AppSidebar = () => {
 
   return (
     <Sidebar>
-      <SidebarHeader className="bg-white">
+      <SidebarHeader className="bg-background text-foreground">
         <img src={logo} alt="Logo" width={120} />
       </SidebarHeader>
 
-      <SidebarContent className="bg-white">
+      <SidebarContent className="bg-background text-foreground">
         <SidebarGroup />
         <SidebarMenu>
           <SidebarMenuItem>

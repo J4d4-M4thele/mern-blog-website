@@ -39,14 +39,14 @@ const SearchBox = ({ className, ...props }) => {
     navigate(trimmed ? RouteSearch(trimmed) : RouteIndex);
   };
   return (
-    <form className="w-full" onSubmit={handleSubmit}>
+    <form className="w-full bg-background" onSubmit={handleSubmit}>
       <Input
         name="q"
         value={query}
         onChange={getInput}
         placeholder="Search here..."
         className={cn(
-          "h-9 rounded-full border-input text-sm px-4 bg-gray-50",
+          "h-9 rounded-full border-input text-sm px-4 bg-background text-foreground",
           className,
         )}
         {...props}
