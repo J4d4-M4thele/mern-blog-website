@@ -17,11 +17,13 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
+
+const allowedOrigin = process.env.FRONTEND_URL?.replace(/\/$/, "");
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: allowedOrigin,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   }),
 );
 
